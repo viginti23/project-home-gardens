@@ -1,0 +1,45 @@
+{% extends "home/base.html" %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="content-section container">
+    <form method="POST" enctype="multipart/form-data">
+            <div class='row'>
+                <div class='col'>
+                    {% csrf_token %}
+                    <legend class="border-bottom py-2 mb-4 text-center h3">
+                    Edytuj swoje ogłoszenie
+                    </legend>
+                    <div class='content-section3 p-4 mw-100' style='text-align:unset'>
+                        {{ offer_form | crispy }}
+                    </div>
+                </div>
+            </div>
+
+                <!-- Displaying current images with the delete field -->
+                {% for offer_img in current_imgs %}
+                    <div class='row m-3'>
+                        <div class='col'>
+{#                            <img src="{{ offer_img.offer_gallery_img.url }}" alt='fotka produktu' width='device-width'>#}
+                            <div class="form-check">
+                                <input class="form-check-input mt-4" name='delete' value='{{ offer_gallery_img.id }}' type="checkbox"
+                                    id="flexCheckDefault{{ offer_gallery_img.id }}">
+                                <label class="form-check-label btn btn-danger mt-3" for="flexCheckDefault{{ offer_gallery_img.id }}">
+                                    Usuń zdjęcie
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                <!----------------------------------------->
+
+        <div class='content-section3 p-4'>
+            <h4 class="text-center display-4">Dodaj nowe zdjęcia!</h4>
+            <div class='mt-4'>{{ new_image_form | crispy }}</div>
+        </div>
+        <div class="mx-auto my-auto text-center">
+            <button class="btn btn-success" type="submit">Zapisz zmiany!</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}

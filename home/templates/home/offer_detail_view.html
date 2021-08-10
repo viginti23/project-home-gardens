@@ -1,0 +1,127 @@
+{% extends "home/base.html" %}
+{% load static %}
+{% block content %}
+<div class="content-section container">
+
+    <div class="row">
+        <div class="col-12 mx-auto">
+
+            <ul class="nav nav-pills nav-justified mt-2 shadow-lg" id="myTab" role="tablist">
+
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="offer-tab" data-bs-toggle="tab" data-bs-target="#offer"
+                        type="button" role="tab" aria-controls="offer" aria-selected="true">
+                        Ogłoszenie
+                    </button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="seller-tab" data-bs-toggle="tab" data-bs-target="#seller" type="button"
+                        role="tab" aria-controls="seller" aria-selected="false">
+                        Sprzedający
+                    </button>
+                </li>
+
+            </ul>
+
+            <div class="tab-content mt-1 pt-3 shadow-lg" id="myTabContent">
+
+
+                <!-- OFFER DETAILS -->
+
+                <div class="tab-pane fade show active" id="offer" role="tabpanel" aria-labelledby="offer-tab">
+
+                    <!-- OFFER TITLE -->
+                    <div class='d-inline'>
+                        <h2 class="card-title text-center mt-2"> {{object.title}} </h2>
+                        <span><img class='btn' style='max-width: 75px;' src='{% static "hearticon.png" %}'/></span>
+                    </div>
+                    <!-- OFFER BODY -->
+                    <div class="card-body">
+                        <h4>Cena: <small> {{ object.price|stringformat:".2f" }} zł</small></h4>
+                        {% if object.negotiable %}
+                        <p class='italic'>Cena podlega negocjacji!</p>
+                        {% endif %}
+                        <p class='text-break' >{{ object.description }} </p>
+
+
+
+
+
+                    </div>
+
+                    <!-- KARUZELA -->
+                    <div class="d-flex justify-content-center ">
+                        <div id="carouselExampleInterval" class="mb-3 carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner" style="max-height:600px">
+                                {% for offer_image in full_images %}
+                                    {% if forloop.first %}
+                                        <div class="carousel-item active">
+                                            <a href='{{ offer_image.image.url }}'>
+                                                <img class='img-fluid ' src="{{ offer_image.offer_gallery_image.url }}" alt="..."></a>
+                                        </div>
+                                    {% else %}
+                                        <div class="carousel-item">
+                                            <a href='{{ offer_image.image.url }}'>
+                                                <img class='img-fluid ' src='{{ offer_image.offer_gallery_image.url }}' alt="..."></a>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+
+                            <!--   BUTTON PREVIOUS SLIDE -->
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval"
+                                data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+
+                            <!--   BUTTON NEXT SLIDE -->
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval"
+                                data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+
+                        </div>
+                    </div>
+
+
+                    <!--   BUTTONS UPDATE DELETE -->
+                    {% if user.is_authenticated %}
+                        {% if user.id == object.seller_id %}
+                        <div class="d-flex justify-content-center my-2 mb-4">
+
+                            <a href="{% url 'offerupdate' object.id %}" class="btn btn-secondary mx-2 py-2 px-4 " type="submit">Update</a>
+
+                            <a href="{% url 'offerdelete' object.id %}" class="btn btn-danger mx-2 py-2 px-4 " type="submit">Delete</a>
+
+                        </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+
+
+                <!-- SELLER DETAILS -->
+
+                <div class="tab-pane fade" id="seller" role="tabpanel" aria-labelledby="seller-tab">
+
+                    <div class="dropdown">
+                        <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Zobacz inne ogłoszenia tego sprzedającego
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            {% for offer in object.seller.offer_set.all %}
+                            <li><a class="dropdown-item" href="{% url 'offerdetail' offer.id %}">{{ offer.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

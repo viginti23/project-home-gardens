@@ -1,0 +1,71 @@
+{% extends "home/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="row">
+    <div class="col-12 mx-auto">
+
+        <!-- TABS' HEADERS -->
+        <ul class="nav nav-pills nav-justified mt-2" id="myTab" role="tablist">
+
+            <!-- TAB1 MOJE_KONTO -->
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="myprofile-tab" data-bs-toggle="tab" data-bs-target="#myprofile"
+                    type="button" role="tab" aria-controls="myprofile" aria-selected="true">
+                    Moje konto
+                </button>
+            </li>
+
+            <!-- TAB2  -->
+
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="offer-tab" data-bs-toggle="tab" data-bs-target="#offer" type="button" role="tab"
+                    aria-controls="offer" aria-selected="true">
+                    Moje ogłoszenia
+                </button>
+            </li>
+
+            <!-- TAB3  -->
+
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="offer-tab" data-bs-toggle="tab" data-bs-target="#offer" type="button" role="tab"
+                    aria-controls="offer" aria-selected="true">
+                    Obserwowane
+                </button>
+            </li>
+
+            <!-- TAB4 -->
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="seller-tab" data-bs-toggle="tab" data-bs-target="#seller" type="button"
+                    role="tab" aria-controls="seller" aria-selected="false">
+                    Resetuj hasło
+                </button>
+            </li>
+
+        </ul>
+
+        <!-- TABS -->
+        <div class="tab-content mt-4" id="myTabContent">
+
+            <!-- TAB1 MOJE_KONTO -->
+            {% include '../account/my_account_details.html' %}
+
+
+            <!-- TAB2  -->
+            {% include '../account/my_offers.html' %}
+
+
+            <!-- TAB3 -->
+            {% include '../account/observed_offers.html' %}
+
+
+            <!-- TAB4 -->
+            {% include '../account/reset_password.html' %}
+           
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock content %}
