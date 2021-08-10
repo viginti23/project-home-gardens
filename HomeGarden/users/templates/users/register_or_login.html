@@ -1,0 +1,36 @@
+{% extends "home/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="row justify-content-around my-3">
+
+    <div class='col-4 content-section shadow-lg d-flex align-items-center pb-3'>
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4 text-center">Załóż konto!</legend>
+                {{ user_register_form | crispy }}
+        
+            </fieldset>
+            <div class="form-group d-grid gap-2 mx-auto">
+                <button class="btn btn-block btn-success" type="submit" name="register" value="register">Dołącz!</button>
+            </div>
+        </form>
+    </div>
+
+
+
+    <div class='col-4 content-section shadow-lg h-100 pb-3 my-auto'>
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4 text-center">Zaloguj się!</legend>
+                {{ user_login_form | crispy }}
+            </fieldset>
+            <div class="form-group d-grid gap-2 mx-auto">
+                <button class="btn btn-block btn-success" type="submit" name="login" value="login">Zaloguj!</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}
+

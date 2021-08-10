@@ -1,0 +1,46 @@
+{% extends "home/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="content-section container">
+    <form method="POST" enctype="multipart/form-data">
+            <div class='row'>
+                <div class='col'>
+                    {% csrf_token %}
+                    <legend class="border-bottom pb-2 mb-4 text-center h3">
+                    Edytuj swoje ogłoszenie
+                    </legend>
+                    <div class='content-section3 p-4 mw-100' style='text-align:unset'>
+                    {{ offer_form | crispy }}
+                    </div>
+                </div>
+            </div>
+
+
+                <!-- Dislaying current images with the delete field -->
+                {% for offer_img in current_offer_imgs %}
+                <div class='m-3'>
+                        <img src="{{ offer_img.image.url }}" alt= 'fotka produktu' width=device-width>
+                        <div class="form-check">
+                            <input class="form-check-input mt-4" name='delete' 
+                            value='{{ offer_img.id }}' type="checkbox" value="" id="flexCheckDefault{{ offer_img.id }}">
+                            <label class="form-check-label btn btn-danger mt-3" for="flexCheckDefault{{ offer_img.id }}">
+                                Usuń zdjęcie
+                            </label>
+                        </div>
+                </div>
+                {% endfor %}
+                <!----------------------------------------->
+
+        <div class='content-section3 p-4'>
+            <h4 class="text-center display-4">Dodaj nowe zdjęcia!</h4>
+            <div class='mt-4'>{{ new_image_form | crispy }}</div>
+        </div>
+        <div class="mx-auto my-auto text-center">
+            <button class="btn btn-success" type="submit">Zapisz zmiany!</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}</div>
+
+
+<div class='mx-auto w-50 my-auto text-center'>

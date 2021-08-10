@@ -1,0 +1,114 @@
+{% extends "home/base.html" %}
+{% load static %}
+{% block content %}
+<div class="row">
+    <div class="col-12 mx-auto">
+
+        <ul class="nav nav-pills nav-justified mt-2" id="myTab" role="tablist">
+
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="offer-tab" data-bs-toggle="tab" data-bs-target="#offer"
+                    type="button" role="tab" aria-controls="offer" aria-selected="true">
+                    Ogłoszenie
+                </button>
+            </li>
+
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="seller-tab" data-bs-toggle="tab" data-bs-target="#seller" type="button"
+                    role="tab" aria-controls="seller" aria-selected="false">
+                    Sprzedający
+                </button>
+            </li>
+
+        </ul>
+
+
+        <div class="tab-content" id="myTabContent">
+
+
+            <!-- OFFER DETAILS -->
+
+            <div class="tab-pane fade show active" id="offer" role="tabpanel" aria-labelledby="offer-tab">
+                
+                <!-- OFFER TITLE -->
+                <h2 class="card-title text-center mt-2 border-1"> {{object.title}} </h2>
+
+                <!-- OFFER BODY -->
+                <div class="card-body">
+                    <h4>Cena: <small> {{ object.price|stringformat:".2f" }} zł</small></h4>
+                    {% if object.negotiable %}
+                    <p class='italic'>Cena podlega negocjacji!</p>
+                    {% endif %}
+                    <p class='text-break' >{{ object.description }} </p>
+                </div>
+
+                <!-- KARUZELA -->
+                <div class="d-flex justify-content-center >">
+                    <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner"  style="max-width:900px; max-height:600px !important;">
+                            {% for offer_img in object.offerimage_set.all %}
+                                {% if forloop.first %}
+                            <div class="carousel-item active" data-bs-interval="10000">
+                                <a href='{{ offer_img.image.url }}'><img src="{{ offer_img.image.url }}" class="d-block" alt="..."></a>
+                            </div>
+                                {% else %}
+                            <div class="carousel-item" data-bs-interval="10000">
+                                <a href='{{ offer_img.image.url }}'> <img src='{{ offer_img.image.url }}' class="d-block" alt="..."> </a>
+                            </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval"
+                            data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval"
+                            data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+
+
+                <!--   BUTTONS UPDATE DELETE -->
+                {% if user.is_authenticated %}
+                <div class="d-flex justify-content-center my-2 outline">
+
+                    <a href="{% url 'offerupdate' object.id %}" class="btn btn-secondary mx-2 py-2 px-4 " type="submit">Update</a>
+
+                    <a href="{% url 'offerdelete' object.id %}" class="btn btn-danger mx-2 py-2 px-4 " type="submit">Delete</a>
+
+                </div>
+                {% endif %}
+
+            </div>
+
+
+            <!-- SELLER DETAILS -->
+
+            <div class="tab-pane fade" id="seller" role="tabpanel" aria-labelledby="seller-tab">
+
+                <div class="dropdown">
+                    <a class="btn btn-info dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Zobacz inne ogłoszenia tego sprzedającego
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        {% for offer in object.seller.offer_set.all %}
+                        <li><a class="dropdown-item" href="{% url 'offerdetail' offer.id %}">{{ offer.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>     
+    </div>
+</div>
+
+
+
+
+{% endblock content %}
