@@ -23,7 +23,6 @@ def offer_form_view(request):
             offer_instance = offer_form.save(commit=False)
             offer_instance.seller_id = request.user.id
             offer_instance.save()
-
             for pic in pics:
                 try:
                     img_instance = OfferImage(image=pic, offer=offer_instance)

@@ -35,7 +35,7 @@ class Offer(models.Model):
     title = models.CharField(
         max_length=100, verbose_name="Nazwa przedmiotu:", null=True, blank=True)
     description = models.TextField(
-        max_length=500, verbose_name="Opis:", null=True, blank=True)
+        max_length=1024, verbose_name="Opis:", null=True, blank=True)
     price = models.FloatField(verbose_name="Cena:", null=True, blank=True)
     seller = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Sprzedawca: ')
     date_posted = models.DateTimeField(default=timezone.now)
@@ -45,6 +45,8 @@ class Offer(models.Model):
     maintenance_category = models.ForeignKey(MaintenanceCategory,
                                              on_delete=models.DO_NOTHING, default=None,
                                              verbose_name='Pielęgnacja rośliny', null=True, blank=True)
+    indoor = models.BooleanField(blank=True, null=True)
+    outdoor = models.BooleanField(blank=True, null=True)
 
     # location = models.TextField()
 
@@ -53,10 +55,6 @@ class Offer(models.Model):
 
     def get_absolute_url(self, *args, **kwargs):
         return reverse('offerdetail', kwargs={'pk': self.pk})
-
-
-
-
 
 
 class OfferImage(models.Model):
@@ -76,8 +74,7 @@ class OfferGalleryImage(models.Model):
     gallery_image = models.ImageField(verbose_name="  ",
                                       null=True, blank=True,
                                       upload_to='products_pics/', default='products_pics/default.png')
-    offer = models.ForeignKey(
-        Offer, on_delete=models.CASCADE, blank=True, null=True)
+    offer = models.ForeignKey(Offer, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return f'{self.offer.title} - Gallery Image'

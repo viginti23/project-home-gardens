@@ -9,39 +9,57 @@ from django.contrib import messages
 
 # Create your views here.
 
+@unauthenticated_user
+def login_user(request, *args, **kwargs):
+    user_login_form = UserLoginForm()
+    template_name = 'users/login.html'
+    context = {'user_login_form': user_login_form, 'request': request}
+    if request.method == 'POST':
+        # if 'loginUser' in request.POST:
+        # user_login_form = UserLoginForm(request.POST)
+        # if user_login_form.is_valid():
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        #     user_login_form.save()
+        # username = user_login_form.instance.get('username')
+        # password = user_login_form.instance.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user:
+            login(request, user)
+            messages.success(request, 'Jesteś teraz zalogowany.')
+            return redirect('offerlist')
+        else:
+            messages.warning(request, 'Nieprawidłowy login lub hasło!')
+            return redirect('login')
+    return render(request, template_name, context)
+
 
 @unauthenticated_user
-def register_or_login(request, *args, **kwargs):
+def register_user(request, *args, **kwargs):
     if request.method == 'POST':
-        if 'register' in request.POST:
-            user_register_form = UserRegisterForm(request.POST)
-            if user_register_form.is_valid():
-                user_register_form.save()
-                username = user_register_form.cleaned_data['username']
-                messages.success(
-                    request, f'Konto {username} zostało utworzone! Możesz się teraz zalogować.')
-                return redirect('login')
-
-        if 'login' in request.POST:
-            username = request.POST.get('username')
-            password = request.POST.get('password')
-            user = authenticate(request, username=username, password=password)
-            if user:
-                login(request, user)
-                messages.success(request, 'Jesteś teraz zalogowany.')
-                return redirect('login')
-
-    user_register_form = UserRegisterForm()
-    user_login_form = UserLoginForm()
-    template_name = 'users/register_or_login.html'
-    context = {'user_register_form': user_register_form, 'user_login_form': user_login_form, 'request': request}
+        # if 'registerUser' in request.POST:
+        user_register_form = UserRegisterForm(request.POST)
+        if user_register_form.is_valid():
+            # user = User.objects.create_user(
+            #     username=user_register_form.clean_data['username'],
+            #     password=user_register_form.clean_data['password1'],
+            #     email=user_register_form.clean_data['email'])
+            user = user_register_form.save(commit=False)
+            user.save()
+            username = user_register_form.cleaned_data['username']
+            messages.success(request, f'Konto {username} zostało utworzone! Możesz się teraz zalogować.')
+            return redirect('login')
+    else:
+        user_register_form = UserRegisterForm()
+    template_name = 'users/register.html'
+    context = {'user_register_form': user_register_form, 'request': request}
     return render(request, template_name, context)
 
 
 @login_required(login_url='login')
-def my_account(request, id):
-    if request.user.id == id:
-        user = User.objects.get(id=id)
+def my_account(request, pk):
+    if request.user.id == pk:
+        user = User.objects.get(id=pk)
         if request.method == 'POST':
             user_update_form = UserUpdateForm(request.POST, instance=user)
             account_update_form = AccountUpdateForm(
@@ -61,7 +79,7 @@ def my_account(request, id):
     return redirect('profile')
 
 
-def profile(request, id):
+def profile(request, pk):
     template = 'users/profile.html'
     context = {}
     return render(request, template, context)

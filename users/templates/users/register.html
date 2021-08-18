@@ -1,0 +1,29 @@
+{% extends "home/base.html" %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+
+<div class="row justify-content-around my-3">
+     <div class='d-table-cell col-sm-12 col-md-5 content-section shadow-lg d-flex align-items-center pb-3'>
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4 text-center">Załóż konto!</legend>
+
+                <div class="d-inline px-auto mx-auto">{{ user_register_form | crispy }}</div>
+{#                    <div>#}
+{#                            {% if user_register_form.errors %}#}
+{#                                <p>asdas</p>#}
+{#                            {% endif %}#}
+{#                    </div>#}
+                <div class="form-group d-grid gap-2 mx-auto">
+                    <button class="btn btn-block btn-success" name="registerUser" type="submit" value="registerUser">Dołącz!</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}
+

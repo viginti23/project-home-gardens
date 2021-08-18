@@ -32,9 +32,9 @@
                 <div class="tab-pane fade show active" id="offer" role="tabpanel" aria-labelledby="offer-tab">
 
                     <!-- OFFER TITLE -->
-                    <div class='d-inline'>
-                        <h2 class="card-title text-center mt-2"> {{object.title}} </h2>
-                        <span><img class='btn' style='max-width: 75px;' src='{% static "hearticon.png" %}'/></span>
+                    <div class=''>
+                        <h2 class="card-title text-center mt-2"> {{object.title}}</h2>
+                        <span class="d-flex justify-content-end"><img class='btn' style='max-width: 75px;' src='{% static "hearticon.png" %}'/></span>
                     </div>
                     <!-- OFFER BODY -->
                     <div class="card-body">
@@ -43,9 +43,6 @@
                         <p class='italic'>Cena podlega negocjacji!</p>
                         {% endif %}
                         <p class='text-break' >{{ object.description }} </p>
-
-
-
 
 
                     </div>
@@ -58,12 +55,12 @@
                                     {% if forloop.first %}
                                         <div class="carousel-item active">
                                             <a href='{{ offer_image.image.url }}'>
-                                                <img class='img-fluid ' src="{{ offer_image.offer_gallery_image.url }}" alt="..."></a>
+                                                <img class='img-fluid ' src="{{ offer_image.offergalleryimage.gallery_image.url }}" alt="..."></a>
                                         </div>
                                     {% else %}
                                         <div class="carousel-item">
                                             <a href='{{ offer_image.image.url }}'>
-                                                <img class='img-fluid ' src='{{ offer_image.offer_gallery_image.url }}' alt="..."></a>
+                                                <img class='img-fluid ' src='{{ offer_image.offergalleryimage.gallery_image.url }}' alt="..."></a>
                                         </div>
                                     {% endif %}
                                 {% endfor %}

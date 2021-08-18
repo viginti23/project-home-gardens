@@ -1,12 +1,12 @@
 from .models import Offer, OfferImage
 from django import forms
 
+
 class CreateOfferForm(forms.ModelForm):
-    
     class Meta:
         model = Offer
         fields = ['title', 'description', 'price',
-                  'negotiable']
+                  'negotiable', 'size_category', 'maintenance_category']
 
 
 class CreateOfferImageForm(forms.ModelForm):
