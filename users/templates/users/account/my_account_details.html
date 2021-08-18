@@ -1,12 +1,14 @@
+{% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
 {% load static %}
 
 
 
 <!-- TAB1 MOJE_KONTO -->
-<div class='d-flex'>
-    <img class='img-fluid account-img' src='{{ user.account.image.url }}' alt='profile image'>
-    <p class='d-inline '>{{ user.username }}</p>
+<div class='d-flex row'>
+    <img class='img-fluid account-img' src='{{ user.account.profile_image.url }}' alt='profile image'>
+    <p class='d-flex '>{{ user.username }}</p>
+
 </div>
 
 
@@ -14,11 +16,19 @@
     {% csrf_token %}
 
     <div class="tab-pane fade show active" id="myprofile" role="tabpanel" aria-labelledby="myprofile-tab">
-        {% for field in account_update_form %}
-        {{ field }}
-        {% endfor %}
+{#        {% for field in account_update_form %}#}
+{#            <p>{{ field }}</p>#}
+{#        {% endfor %}#}
+        <div>                           {{ account_form | crispy }}
+
+
+        </div>
+
         <hr>
-        {{ user_update_form | crispy }}
+         <div>                           {{ user_update_form | crispy }}
+
+
+        </div>
     </div>
 
 

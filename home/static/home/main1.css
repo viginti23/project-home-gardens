@@ -16,9 +16,9 @@ ul {
   margin: 0;
 }
 
-div {
-  outline: solid 1px red;
-}
+/*div {*/
+/*  outline: solid 1px red;*/
+/*}*/
 
 .card-img-top {
     width: 100%;

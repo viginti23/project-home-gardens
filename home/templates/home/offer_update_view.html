@@ -17,14 +17,14 @@
             </div>
 
                 <!-- Displaying current images with the delete field -->
-                {% for offer_img in current_imgs %}
+                {% for offergalleryimage in current_imgs %}
                     <div class='row m-3'>
                         <div class='col'>
-{#                            <img src="{{ offer_img.offer_gallery_img.url }}" alt='fotka produktu' width='device-width'>#}
+                            <img src="{{ offergalleryimage.gallery_image.url }}" alt='fotka produktu' width='device-width'>
                             <div class="form-check">
-                                <input class="form-check-input mt-4" name='delete' value='{{ offer_gallery_img.id }}' type="checkbox"
-                                    id="flexCheckDefault{{ offer_gallery_img.id }}">
-                                <label class="form-check-label btn btn-danger mt-3" for="flexCheckDefault{{ offer_gallery_img.id }}">
+                                <input class="form-check-input mt-4" name='delete' value='{{ offergalleryimage.id }}' type="checkbox"
+                                    id="flexCheckDefault{{ offergalleryimage.id }}">
+                                <label class="form-check-label btn btn-danger mt-3" for="flexCheckDefault{{ offergalleryimage.id }}">
                                     Usuń zdjęcie
                                 </label>
                             </div>

@@ -3,9 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
-from .forms import UserRegisterForm, UserLoginForm, UserUpdateForm, AccountUpdateForm
+from .forms import UserRegisterForm, UserLoginForm, UserUpdateForm, AccountForm
 from django.contrib import messages
-
 
 # Create your views here.
 
@@ -16,13 +15,8 @@ def login_user(request, *args, **kwargs):
     context = {'user_login_form': user_login_form, 'request': request}
     if request.method == 'POST':
         # if 'loginUser' in request.POST:
-        # user_login_form = UserLoginForm(request.POST)
-        # if user_login_form.is_valid():
         username = request.POST.get('username')
         password = request.POST.get('password')
-        #     user_login_form.save()
-        # username = user_login_form.instance.get('username')
-        # password = user_login_form.instance.get('password')
         user = authenticate(request, username=username, password=password)
         if user:
             login(request, user)
@@ -61,22 +55,24 @@ def my_account(request, pk):
     if request.user.id == pk:
         user = User.objects.get(id=pk)
         if request.method == 'POST':
-            user_update_form = UserUpdateForm(request.POST, instance=user)
-            account_update_form = AccountUpdateForm(
-                request.POST, request.FILES, instance=user.account)
-            pic = request.FILES.get('image')
-            if user_update_form.is_valid() and account_update_form.is_valid():
+            user_update_form = UserUpdateForm(request.POST, request.FILES)
+            account_form = AccountForm(
+                request.POST, request.FILES)
+            # pic = request.FILES.get('image')
+            if user_update_form.is_valid() and account_form.is_valid():
                 user_update_form.save()
-                account_update_form.save()
-        user_update_form = UserUpdateForm(instance=user)
-        account_update_form = AccountUpdateForm(instance=user)
+                account_form.save()
+        else:
+            user_update_form = UserUpdateForm(instance=user)
+            account_form = AccountForm()
         template = 'users/account/account.html'
         context = {
-            'user_update_form': user_update_form,
-            'account_update_form': account_update_form,
-        }
+                'user_update_form': user_update_form,
+                'account_form': account_form,
+                    }
         return render(request, template, context)
-    return redirect('profile')
+    else:
+        return redirect('profile')
 
 
 def profile(request, pk):

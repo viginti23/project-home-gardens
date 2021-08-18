@@ -4,7 +4,6 @@ from django.utils import timezone
 from django.urls import reverse
 from django.core.files.storage import FileSystemStorage
 
-
 # from django.conf import settings
 
 # fs = FileSystemStorage(location=settings.MEDIA_ROOT)
@@ -47,8 +46,10 @@ class Offer(models.Model):
                                              verbose_name='Pielęgnacja rośliny', null=True, blank=True)
     indoor = models.BooleanField(blank=True, null=True)
     outdoor = models.BooleanField(blank=True, null=True)
+    pet_friendly = models.BooleanField(blank=True, null=True, verbose_name="Roślina przyjazna zwierzętom:")
 
-    # location = models.TextField()
+    location = models.CharField(
+        max_length=100, verbose_name="Lokalizacja:", null=True, blank=True)
 
     def __str__(self):
         return f'{self.title}'
