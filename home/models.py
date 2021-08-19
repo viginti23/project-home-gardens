@@ -36,16 +36,16 @@ class Offer(models.Model):
     description = models.TextField(
         max_length=1024, verbose_name="Opis:", null=True, blank=True)
     price = models.FloatField(verbose_name="Cena:", null=True, blank=True)
+    negotiable = models.BooleanField(verbose_name='Do negocjacji', default=False)
     seller = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Sprzedawca: ')
     date_posted = models.DateTimeField(default=timezone.now)
-    negotiable = models.BooleanField(verbose_name='Do negocjacji', default=True)
     size_category = models.ForeignKey(SizeCategory, on_delete=models.DO_NOTHING,
                                       default=None, verbose_name='Wielkość rośliny', null=True, blank=True)
     maintenance_category = models.ForeignKey(MaintenanceCategory,
                                              on_delete=models.DO_NOTHING, default=None,
                                              verbose_name='Pielęgnacja rośliny', null=True, blank=True)
-    indoor = models.BooleanField(blank=True, null=True)
-    outdoor = models.BooleanField(blank=True, null=True)
+    indoor = models.BooleanField(blank=True, null=True, verbose_name='Roślina outdoorowa:')
+    outdoor = models.BooleanField(blank=True, null=True, verbose_name='Roślina indoorowa:')
     pet_friendly = models.BooleanField(blank=True, null=True, verbose_name="Roślina przyjazna zwierzętom:")
 
     location = models.CharField(

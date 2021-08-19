@@ -53,18 +53,19 @@ def register_user(request, *args, **kwargs):
 @login_required(login_url='login')
 def my_account(request, pk):
     if request.user.id == pk:
-        user = User.objects.get(id=pk)
+        # user = User.objects.get(id=pk)
         if request.method == 'POST':
-            user_update_form = UserUpdateForm(request.POST, request.FILES)
+            user_update_form = UserUpdateForm(request.POST, instance=request.user)
             account_form = AccountForm(
-                request.POST, request.FILES)
+                request.POST, request.FILES, instance=request.user.account)
             # pic = request.FILES.get('image')
             if user_update_form.is_valid() and account_form.is_valid():
                 user_update_form.save()
                 account_form.save()
+                messages.success(request, "Twoje konto zostało uaktualnione!")
         else:
-            user_update_form = UserUpdateForm(instance=user)
-            account_form = AccountForm()
+            user_update_form = UserUpdateForm(instance=request.user)
+            account_form = AccountForm(instance=request.user.account)
         template = 'users/account/account.html'
         context = {
                 'user_update_form': user_update_form,

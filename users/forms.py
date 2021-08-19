@@ -28,5 +28,5 @@ class AccountForm(forms.ModelForm):
     class Meta:
         model = Account
         exclude = ['user']
-        widgets = {'profile_image': forms.ClearableFileInput(
+        widgets = {'profile_image': forms.FileInput(
                             attrs={'multiple': False})}

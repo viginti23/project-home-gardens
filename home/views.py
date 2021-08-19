@@ -70,6 +70,12 @@ class OfferListView(ListView):
     context_object_name = 'offers'
     ordering = ['-date_posted']
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        search_input = self.request.GET.get('searchform') or ''
+        if search_input:
+            context['offers'] = context['offers'].filter(title__icontains=search_input)
+        return context
 
 class OfferUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     fields = ['title', 'description', 'negotiable', 'price']

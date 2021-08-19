@@ -1,14 +1,14 @@
 {% extends "home/base.html" %}
 {% block content %}
 
-<div class="row d-flex justify-content-center">        
-    {% for offer in offers %}
-    <div class="col-12 col-sm-6 col-md-4 col-lg-3 ">
+<div class="row d-flex justify-content-center">
 
+    {% for offer in offers %}
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 ">
             <div class="card content-section2  w-100 my-3 shadow-lg " style='padding: 0'>
 
                 <div class="card-header">
-                    <h3>{{ offer.title }}</h3> 
+                    <h3>{{ offer.title }}</h3>
                 </div>
                 <a href="{{ offer.get_absolute_url }}">
                     <img src="{{ offer.offergalleryimage_set.all.first.gallery_image.url }}"
@@ -22,7 +22,16 @@
                     <p class="card-text">{{ offer.date_posted|timesince }} temu </p>
                 </div>
             </div>
-    </div>    
+        </div>
+
+{#    {% empty %}#}
+{#        <div class="row align-items-center">#}
+{#            <div class="col">#}
+{#                <div class='content-section2 shadow-lg'>#}
+{#                    <h4 class="text-center display-4">Chwilowo brak ofert!</h4>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
     {% endfor %}
 </div>
 

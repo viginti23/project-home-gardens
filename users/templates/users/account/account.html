@@ -5,36 +5,36 @@
     <div class="col-12 mx-auto">
 
         <!-- TABS' HEADERS -->
-        <ul class="nav nav-pills nav-justified mt-2" id="myTab" role="tablist">
+        <ul class="nav nav-pills nav-justified mt-2 shadow-lg" id="myTab" role="tablist">
 
             <!-- TAB1 MOJE_KONTO -->
-            <li class="nav-item" role="presentation">
+            <li class="nav-item mx-1" role="presentation">
                 <button class="nav-link active" id="myprofile-tab" data-bs-toggle="tab" data-bs-target="#myprofile"
                     type="button" role="tab" aria-controls="myprofile" aria-selected="true">
                     Moje konto
                 </button>
             </li>
 
-            <!-- TAB2  -->
+            <!-- TAB2 MOJE OGŁOSZENIA -->
 
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="offer-tab" data-bs-toggle="tab" data-bs-target="#offer" type="button" role="tab"
-                    aria-controls="offer" aria-selected="true">
+            <li class="nav-item mx-1" role="presentation">
+                <button class="nav-link" id="offers-tab" data-bs-toggle="tab" data-bs-target="#offers" type="button" role="tab"
+                    aria-controls="offers" aria-selected="true">
                     Moje ogłoszenia
                 </button>
             </li>
 
-            <!-- TAB3  -->
+            <!-- TAB3 OBSERWUJĘ  -->
 
-            <li class="nav-item" role="presentation">
+            <li class="nav-item mx-1" role="presentation">
                 <button class="nav-link" id="offer-tab" data-bs-toggle="tab" data-bs-target="#offer" type="button" role="tab"
                     aria-controls="offer" aria-selected="true">
                     Obserwowane
                 </button>
             </li>
 
-            <!-- TAB4 -->
-            <li class="nav-item" role="presentation">
+            <!-- TAB4 ZMIEŃ HASŁO -->
+            <li class="nav-item mx-1" role="presentation">
                 <button class="nav-link" id="seller-tab" data-bs-toggle="tab" data-bs-target="#seller" type="button"
                     role="tab" aria-controls="seller" aria-selected="false">
                     Resetuj hasło
@@ -47,20 +47,24 @@
         <div class="tab-content mt-4" id="myTabContent">
 
             <!-- TAB1 MOJE_KONTO -->
-            {% include '../account/my_account_details.html' %}
+            <div class="tab-pane fade show active" id="offer" role="tabpanel" aria-labelledby="offer-tab">
+            {% include 'users/account/my_account_details.html' %}
+            </div>
 
+            <!-- TAB2 MOJE OGŁOSZENIA -->
+            <div class="tab-pane fade" id="offer" role="tabpanel" aria-labelledby="offer-tab">
+            {% include 'users/account/my_offers.html' %}
+            </div>
 
-            <!-- TAB2  -->
-            {% include '../account/my_offers.html' %}
+            <!-- TAB3 OBSERWUJĘ  -->
+            <div class="tab-pane fade" id="offer" role="tabpanel" aria-labelledby="offer-tab">
+            {% include 'users/account/observed_offers.html' %}
+            </div>
 
-
-            <!-- TAB3 -->
-            {% include '../account/observed_offers.html' %}
-
-
-            <!-- TAB4 -->
-            {% include '../account/reset_password.html' %}
-           
+            <!-- TAB4 ZMIEŃ HASŁO -->
+            <div class="tab-pane fade" id="offer" role="tabpanel" aria-labelledby="offer-tab">
+            {% include 'users/account/reset_password.html' %}
+            </div>
         </div>
     </div>
 </div>

@@ -5,8 +5,7 @@ from django import forms
 class CreateOfferForm(forms.ModelForm):
     class Meta:
         model = Offer
-        fields = ['title', 'description', 'price',
-                  'negotiable', 'size_category', 'maintenance_category']
+        exclude = ['seller', 'date_posted']
 
 
 class CreateOfferImageForm(forms.ModelForm):

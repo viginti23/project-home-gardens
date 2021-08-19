@@ -1,39 +1,36 @@
 {% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
+{% load bootstrap_icons %}
 {% load static %}
 
 
-
 <!-- TAB1 MOJE_KONTO -->
-<div class='d-flex row'>
-    <img class='img-fluid account-img' src='{{ user.account.profile_image.url }}' alt='profile image'>
-    <p class='d-flex '>{{ user.username }}</p>
-
-</div>
-
-
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-
-    <div class="tab-pane fade show active" id="myprofile" role="tabpanel" aria-labelledby="myprofile-tab">
-{#        {% for field in account_update_form %}#}
-{#            <p>{{ field }}</p>#}
-{#        {% endfor %}#}
-        <div>                           {{ account_form | crispy }}
-
-
+<div class='row'>
+    <div>
+        <div class='d-flex col justify-content-center'>
+                <h3 class='d-block mt-2'>Witaj {{ user.username }}!</h3>
         </div>
-
         <hr>
-         <div>                           {{ user_update_form | crispy }}
-
-
-        </div>
     </div>
-
-
-    <!--   BUTTONS SAVE  -->
-    <div class="d-flex justify-content-center my-2">
-        <button class="btn btn-secondary mx-2 py-2 px-4" type="submit">Zapisz zmiany</button>
+</div>
+<div class='row'>
+    <div class="tab-pane fade show active" id="myprofile" role="tabpanel" aria-labelledby="myprofile-tab">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="d-flex col justify-content-around">
+                    <img class='img-flex account-img' src='{{ user.account.profile_image.url }}' alt='profile image'>
+                <div class="my-auto">
+                    {{ user_update_form | crispy }}
+                </div>
+            </div>
+                <hr>
+            <div>
+                {{ account_form | crispy }}
+            </div>
+            <!--   SAVE BUTTON  -->
+            <div class="d-flex justify-content-center my-2">
+                <button class="btn btn-secondary mx-2 py-2 px-4" type="submit">Zapisz zmiany</button>
+            </div>
+        </form>
     </div>
-</form>
+</div>

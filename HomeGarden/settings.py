@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'home.apps.HomeConfig',
     'users.apps.UsersConfig',
     'crispy_forms',
-    'crispy_bootstrap5'
+    'crispy_bootstrap5',
+    'django_bootstrap_icons'
 ]
 
 MIDDLEWARE = [
