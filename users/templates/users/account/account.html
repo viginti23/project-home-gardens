@@ -27,16 +27,16 @@
             <!-- TAB3 OBSERWUJĘ  -->
 
             <li class="nav-item mx-1" role="presentation">
-                <button class="nav-link" id="offer-tab" data-bs-toggle="tab" data-bs-target="#offer" type="button" role="tab"
-                    aria-controls="offer" aria-selected="true">
+                <button class="nav-link" id="observed-tab" data-bs-toggle="tab" data-bs-target="#observed" type="button" role="tab"
+                    aria-controls="observed" aria-selected="true">
                     Obserwowane
                 </button>
             </li>
 
             <!-- TAB4 ZMIEŃ HASŁO -->
             <li class="nav-item mx-1" role="presentation">
-                <button class="nav-link" id="seller-tab" data-bs-toggle="tab" data-bs-target="#seller" type="button"
-                    role="tab" aria-controls="seller" aria-selected="false">
+                <button class="nav-link" id="password-tab" data-bs-toggle="tab" data-bs-target="#password" type="button"
+                    role="tab" aria-controls="password" aria-selected="false">
                     Resetuj hasło
                 </button>
             </li>
@@ -47,22 +47,22 @@
         <div class="tab-content mt-4" id="myTabContent">
 
             <!-- TAB1 MOJE_KONTO -->
-            <div class="tab-pane fade show active" id="offer" role="tabpanel" aria-labelledby="offer-tab">
+            <div class="tab-pane fade show active" id="myprofile" role="tabpanel" aria-labelledby="myprofile-tab">
             {% include 'users/account/my_account_details.html' %}
             </div>
 
             <!-- TAB2 MOJE OGŁOSZENIA -->
-            <div class="tab-pane fade" id="offer" role="tabpanel" aria-labelledby="offer-tab">
+            <div class="tab-pane fade" id="offers" role="tabpanel" aria-labelledby="offers-tab">
             {% include 'users/account/my_offers.html' %}
             </div>
 
             <!-- TAB3 OBSERWUJĘ  -->
-            <div class="tab-pane fade" id="offer" role="tabpanel" aria-labelledby="offer-tab">
+            <div class="tab-pane fade" id="observed" role="tabpanel" aria-labelledby="observed-tab">
             {% include 'users/account/observed_offers.html' %}
             </div>
 
             <!-- TAB4 ZMIEŃ HASŁO -->
-            <div class="tab-pane fade" id="offer" role="tabpanel" aria-labelledby="offer-tab">
+            <div class="tab-pane fade" id="password" role="tabpanel" aria-labelledby="password-tab">
             {% include 'users/account/reset_password.html' %}
             </div>
         </div>

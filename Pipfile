@@ -8,6 +8,7 @@ django = "*"
 pillow = "*"
 django-filter = "*"
 django-bootstrap-icons = "*"
+django-phonenumber-field = {extras = ["phonenumbers"], version = "*"}
 
 [dev-packages]
 

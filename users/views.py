@@ -5,8 +5,9 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from .forms import UserRegisterForm, UserLoginForm, UserUpdateForm, AccountForm
 from django.contrib import messages
-
+from home.models import Offer
 # Create your views here.
+
 
 @unauthenticated_user
 def login_user(request, *args, **kwargs):
@@ -31,13 +32,8 @@ def login_user(request, *args, **kwargs):
 @unauthenticated_user
 def register_user(request, *args, **kwargs):
     if request.method == 'POST':
-        # if 'registerUser' in request.POST:
         user_register_form = UserRegisterForm(request.POST)
         if user_register_form.is_valid():
-            # user = User.objects.create_user(
-            #     username=user_register_form.clean_data['username'],
-            #     password=user_register_form.clean_data['password1'],
-            #     email=user_register_form.clean_data['email'])
             user = user_register_form.save(commit=False)
             user.save()
             username = user_register_form.cleaned_data['username']
@@ -53,7 +49,6 @@ def register_user(request, *args, **kwargs):
 @login_required(login_url='login')
 def my_account(request, pk):
     if request.user.id == pk:
-        # user = User.objects.get(id=pk)
         if request.method == 'POST':
             user_update_form = UserUpdateForm(request.POST, instance=request.user)
             account_form = AccountForm(
@@ -63,6 +58,15 @@ def my_account(request, pk):
                 user_update_form.save()
                 account_form.save()
                 messages.success(request, "Twoje konto zostało uaktualnione!")
+
+            if 'delete' in request.POST:
+                ############## DELETE SELECTED OFFERS ##################
+                offers_IDs_to_delete = request.POST.getlist('delete')
+                for ID in offers_IDs_to_delete:
+                    offer_obj = Offer.objects.get(id=int(ID))
+                    offer_obj.delete()
+                ########################################################
+
         else:
             user_update_form = UserUpdateForm(instance=request.user)
             account_form = AccountForm(instance=request.user.account)

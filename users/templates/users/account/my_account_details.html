@@ -18,12 +18,12 @@
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="d-flex col justify-content-around">
-                    <img class='img-flex account-img' src='{{ user.account.profile_image.url }}' alt='profile image'>
+                <img class='img-flex account-img' src='{{ user.account.profile_image.url }}' alt='profile image'>
                 <div class="my-auto">
                     {{ user_update_form | crispy }}
                 </div>
             </div>
-                <hr>
+            <hr>
             <div>
                 {{ account_form | crispy }}
             </div>

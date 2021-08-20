@@ -2,17 +2,65 @@
 {% load static %}
 {% load bootstrap_icons %}
 
-
-
 <div class="row">
     <div class="col">
-        <ul>
-            {% for offer in object.seller.offer_set.all %}
-                <li>
-                    <a href="{% url 'offerdetail' offer.id %}">{{ offer.title }}</a>
-                </li>
-            {% endfor %}
-        </ul>
+        {% if not user.offer_set.all %}
+            <div class="text-center">
+                <h3 class="mt-4">
+                    Nie masz w tej chwili żadnych ogłoszeń!
+                </h3>
+                <a class="nav-item nav-link btn" href="{% url 'offercreate' %}">
+                    {% bs_icon 'plus-circle' %} Dodaj ogłoszenie</a>
+            </div>
+        {% else %}
+        <form method="POST">
+        {% csrf_token %}
+            <table class="table">
+                <tr>
+                    <th>
+                        #
+                    </th>
+                    <th>
+                        Ogłoszenie
+                    </th>
+                    <th>
+                        Edytuj
+                    </th>
+                    <th>
+                        Usuń
+                    </th>
+                </tr>
+                <hr>
+                {% for offer in user.offer_set.all %}
+                    <tr>
+                        <th>
+                            {{ offer.id }}
+                        </th>
+                        <th>
+                            <h6>
+                                <a href="{% url 'offerdetail' offer.id %}"> {{ offer.title }} </a>
+                            </h6>
+                        </th>
+                        <th>
+                            <a href="{% url 'offerupdate' offer.id %}"
+                               class="btn btn-secondary " type="submit">Edytuj</a>
+
+                        </th>
+                        <th>
+                            <input class="form-check-input " name='delete' value='{{ offer.id }}' type="checkbox"
+                            id="flexCheckDefault{{ offer.id }}">
+                            <label class="form-check-label btn btn-danger" for="flexCheckDefault{{ offer.id }}">
+                            Usuń
+                            </label>
+                        </th>
+                    </tr>
+                {% endfor %}
+            </table>
+            <div class="mx-auto my-auto text-center">
+                <button class="btn btn-success" type="submit" name="offersConfirm">Zapisz zmiany!</button>
+            </div>
+        </form>
+        {% endif %}
     </div>
 </div>
 

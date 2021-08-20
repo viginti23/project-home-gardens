@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'crispy_forms',
     'crispy_bootstrap5',
-    'django_bootstrap_icons'
+    'django_bootstrap_icons',
+    'phonenumber_field'
 ]
 
 MIDDLEWARE = [

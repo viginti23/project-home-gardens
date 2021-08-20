@@ -4,49 +4,65 @@ from django.utils import timezone
 from django.urls import reverse
 from django.core.files.storage import FileSystemStorage
 
+
 # from django.conf import settings
 
 # fs = FileSystemStorage(location=settings.MEDIA_ROOT)
 # Create your models here.
 
 
-class SizeCategory(models.Model):
-    name = models.CharField(max_length=25, blank=True, null=True)
-
-    class Meta:
-        verbose_name_plural = "size categories"
-
-    def __str__(self):
-        return f'{self.name}'
-
-
-class MaintenanceCategory(models.Model):
-    name = models.CharField(max_length=60, blank=True, null=True)
-
-    class Meta:
-        verbose_name_plural = "maintenance categories"
-
-    def __str__(self):
-        return f'{self.name}'
+# class SizeCategory(models.Model):
+#
+#
+#     name = models.CharField(max_length=25, blank=True, null=True,)
+#
+#     class Meta:
+#         verbose_name_plural = "size categories"
+#
+#     def __str__(self):
+#         return f'{self.name}'
+#
+#
+# class MaintenanceCategory(models.Model):
+#
+#     name = models.CharField(max_length=60, blank=True, null=True, )
+#
+#     class Meta:
+#         verbose_name_plural = "maintenance categories"
+#
+#     def __str__(self):
+#         return f'{self.name}'
 
 
 class Offer(models.Model):
+    SIZE_CHOICES = [
+        ('Roślina mała', 'Roślina mała'),
+        ('Roślina średnia', 'Roślina średnia'),
+        ('Roślina duża', 'Roślina duża'),
+        ('Roślina bardzo duża', 'Roślina bardzo duża'),
+    ]
+    MAINTENANCE_CHOICES = [
+        ('Roślina mało wymagająca', 'Roślina mało wymagająca'),
+        ('Roślina średnio wymagająca', 'Roślina średnio wymagająca'),
+        ('Roślina bardzo wymagająca', 'Roślina bardzo wymagająca'),
+    ]
     title = models.CharField(
-        max_length=100, verbose_name="Nazwa przedmiotu:", null=True, blank=True)
+        max_length=100, verbose_name="Nazwa przedmiotu:", null=True, blank=False)
     description = models.TextField(
         max_length=1024, verbose_name="Opis:", null=True, blank=True)
-    price = models.FloatField(verbose_name="Cena:", null=True, blank=True)
+    price = models.FloatField(verbose_name="Cena:", null=True, blank=False)
     negotiable = models.BooleanField(verbose_name='Do negocjacji', default=False)
     seller = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Sprzedawca: ')
     date_posted = models.DateTimeField(default=timezone.now)
-    size_category = models.ForeignKey(SizeCategory, on_delete=models.DO_NOTHING,
-                                      default=None, verbose_name='Wielkość rośliny', null=True, blank=True)
-    maintenance_category = models.ForeignKey(MaintenanceCategory,
-                                             on_delete=models.DO_NOTHING, default=None,
-                                             verbose_name='Pielęgnacja rośliny', null=True, blank=True)
-    indoor = models.BooleanField(blank=True, null=True, verbose_name='Roślina outdoorowa:')
-    outdoor = models.BooleanField(blank=True, null=True, verbose_name='Roślina indoorowa:')
-    pet_friendly = models.BooleanField(blank=True, null=True, verbose_name="Roślina przyjazna zwierzętom:")
+    size_category = models.CharField(max_length=64, verbose_name='Wielkość rośliny:', null=True, blank=False,
+                                     choices=SIZE_CHOICES)
+    maintenance_category = models.CharField(max_length=64, verbose_name='Pielęgnacja rośliny:', null=True, blank=False,
+                                            choices=MAINTENANCE_CHOICES)
+
+    indoor = models.BooleanField(blank=False, null=True, verbose_name='Roślina outdoorowa:', default=False)
+    outdoor = models.BooleanField(blank=False, null=True, verbose_name='Roślina indoorowa:', default=False)
+    pet_friendly = models.BooleanField(blank=False, null=True,
+                                       verbose_name="Roślina przyjazna zwierzętom:", default=False)
 
     location = models.CharField(
         max_length=100, verbose_name="Lokalizacja:", null=True, blank=True)
@@ -71,7 +87,8 @@ class OfferImage(models.Model):
 
 
 class OfferGalleryImage(models.Model):
-    offer_image = models.OneToOneField(OfferImage, on_delete=models.CASCADE, related_name='offergalleryimage', null=True, blank=True)
+    offer_image = models.OneToOneField(OfferImage, on_delete=models.CASCADE, related_name='offergalleryimage',
+                                       null=True, blank=True)
     gallery_image = models.ImageField(verbose_name="  ",
                                       null=True, blank=True,
                                       upload_to='products_pics/', default='products_pics/default.png')

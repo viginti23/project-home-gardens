@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import MaintenanceCategory, SizeCategory, Offer, OfferGalleryImage, OfferImage
+from .models import Offer, OfferGalleryImage, OfferImage
 
 
 admin.site.register(OfferImage)
@@ -16,5 +16,3 @@ class OfferAdmin(admin.ModelAdmin):
 
 admin.site.register(Offer, OfferAdmin)
 admin.site.register(OfferGalleryImage)
-admin.site.register(SizeCategory)
-admin.site.register(MaintenanceCategory)

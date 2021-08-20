@@ -1,12 +1,10 @@
 from django.shortcuts import redirect, render, get_object_or_404
-from django.urls import reverse
 from django.views.generic.edit import UpdateView
 from .models import Offer, OfferGalleryImage, OfferImage
 from django.contrib.auth.decorators import login_required
 from .forms import CreateOfferForm, CreateOfferImageForm, UpdateOfferImageForm
 from django.contrib import messages
-from django.views.generic import CreateView, FormView, DetailView, ListView, DeleteView
-from django.contrib.messages.views import SuccessMessageMixin
+from django.views.generic import ListView, DeleteView
 from PIL import Image, UnidentifiedImageError
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
@@ -28,20 +26,7 @@ def offer_form_view(request):
                     img_instance = OfferImage(image=pic, offer=offer_instance)
                     img_instance.save()
 
-                    ### TO SIGNALS ###
-                    gallery_img_instance = OfferGalleryImage(
-                        gallery_image=pic, offer=offer_instance, offer_image=img_instance)
-                    gallery_img_instance.save()
 
-                    ############### RESIZING IMAGES ###############
-                    new_pic = Image.open(
-                        gallery_img_instance.gallery_image.path)
-                    if new_pic.width > 500 or new_pic.height > 250:
-                        output_size = (500, 250)
-                        new_pic.thumbnail(output_size)
-                        new_pic.save(
-                            gallery_img_instance.gallery_image.path)
-                    ###############################################
 
                 except UnidentifiedImageError:
                     messages.warning(
@@ -76,6 +61,7 @@ class OfferListView(ListView):
         if search_input:
             context['offers'] = context['offers'].filter(title__icontains=search_input)
         return context
+
 
 class OfferUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     fields = ['title', 'description', 'negotiable', 'price']
@@ -130,18 +116,20 @@ class OfferUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
                 try:
                     img_instance = OfferImage(image=pic, offer=offer_instance)
                     img_instance.save()
-                    gallery_img_instance = OfferGalleryImage(
-                        gallery_image=pic, offer=offer_instance, offer_image=img_instance)
-                    gallery_img_instance.save()
 
-                    ############### RESIZING IMAGES ###############
-                    new_pic = Image.open(gallery_img_instance.gallery_image.path)
-                    if new_pic.width > 500 or new_pic.height > 250:
-                        output_size = (500, 250)
-                        new_pic.thumbnail(output_size)
-                        new_pic.save(
-                            gallery_img_instance.gallery_image.path)
-                    ###############################################
+                    #####SINGALS######
+                    # gallery_img_instance = OfferGalleryImage(
+                    #     gallery_image=pic, offer=offer_instance, offer_image=img_instance)
+                    # gallery_img_instance.save()
+                    #
+                    # ############### RESIZING IMAGES ###############
+                    # new_pic = Image.open(gallery_img_instance.gallery_image.path)
+                    # if new_pic.width > 500 or new_pic.height > 250:
+                    #     output_size = (500, 250)
+                    #     new_pic.thumbnail(output_size)
+                    #     new_pic.save(
+                    #         gallery_img_instance.gallery_image.path)
+                    # ###############################################
 
                 except UnidentifiedImageError:
                     messages.warning(request, 'Nie wszystkie zdjęcia zostały dodane!')
