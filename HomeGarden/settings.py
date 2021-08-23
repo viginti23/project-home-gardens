@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'django_bootstrap_icons',
-    'phonenumber_field'
+    'phonenumber_field',
+    'django_cleanup'
 ]
 
 MIDDLEWARE = [

@@ -4,20 +4,21 @@ from django.dispatch import receiver
 from .models import OfferGalleryImage, OfferImage
 from PIL import Image
 
-
-@receiver(post_save, sender=OfferImage)
-def create_offer_gallery_image(sender, instance, created, **kwargs):
-    if created:
-        OfferGalleryImage.objects.create(gallery_image=instance.image, offer=instance.offer,
-                                         offer_image=instance)
-        old = instance.image
-        new_gallery_image = Image.open(instance.offergalleryimage.gallery_image.path)
-        if new_gallery_image.width > 500 or new_gallery_image.height > 250:
-            output_size = (500, 250)
-            new_gallery_image.thumbnail(output_size)
-            new_gallery_image.save(instance.offergalleryimage.gallery_image.path)
-        instance.image = old
-
-@receiver(post_save, sender=OfferImage)
-def save_offer_gallery_image(sender, instance, created, **kwargs):
-    instance.offergalleryimage.save()
+#
+# @receiver(post_save, sender=OfferImage)
+# def create_offer_gallery_image(sender, instance, created, **kwargs):
+#     if created:
+#         ins = OfferGalleryImage.objects.create(
+#             offer_image=instance, gallery_image=instance.image, offer=instance.offer)
+#         ins.save(commit=False)
+#
+#
+# @receiver(post_save, sender=OfferImage)
+# def save_offer_gallery_image(sender, instance, **kwargs):
+#     new_pic = Image.open(instance.offergalleryimage.path)
+#     if new_pic.width > 500 or new_pic.height > 250:
+#         output_size = (500, 250)
+#         new_pic.thumbnail(output_size)
+#         new_pic.save(instance.offergalleryimage.gallery_image.path)
+#
+#     instance.offergalleryimage.save()

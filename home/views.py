@@ -25,9 +25,19 @@ def offer_form_view(request):
                 try:
                     img_instance = OfferImage(image=pic, offer=offer_instance)
                     img_instance.save()
+                    #### SIGNALS ######
+                    gallery_img_instance = OfferGalleryImage(
+                        gallery_image=pic, offer=offer_instance, offer_image=img_instance)
+                    gallery_img_instance.save()
 
-
-
+                    ############### RESIZING IMAGES ###############
+                    new_pic = Image.open(gallery_img_instance.gallery_image.path)
+                    if new_pic.width > 500 or new_pic.height > 250:
+                        output_size = (500, 250)
+                        new_pic.thumbnail(output_size)
+                        new_pic.save(
+                            gallery_img_instance.gallery_image.path)
+                    ###############################################
                 except UnidentifiedImageError:
                     messages.warning(
                         request, 'Nie wszystkie zdjęcia zostały dodane!')
@@ -117,19 +127,19 @@ class OfferUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
                     img_instance = OfferImage(image=pic, offer=offer_instance)
                     img_instance.save()
 
-                    #####SINGALS######
-                    # gallery_img_instance = OfferGalleryImage(
-                    #     gallery_image=pic, offer=offer_instance, offer_image=img_instance)
-                    # gallery_img_instance.save()
-                    #
-                    # ############### RESIZING IMAGES ###############
-                    # new_pic = Image.open(gallery_img_instance.gallery_image.path)
-                    # if new_pic.width > 500 or new_pic.height > 250:
-                    #     output_size = (500, 250)
-                    #     new_pic.thumbnail(output_size)
-                    #     new_pic.save(
-                    #         gallery_img_instance.gallery_image.path)
-                    # ###############################################
+                    #### SIGNALS ######
+                    gallery_img_instance = OfferGalleryImage(
+                        gallery_image=pic, offer=offer_instance, offer_image=img_instance)
+                    gallery_img_instance.save()
+
+                    ############### RESIZING IMAGES ###############
+                    new_pic = Image.open(gallery_img_instance.gallery_image.path)
+                    if new_pic.width > 500 or new_pic.height > 250:
+                        output_size = (500, 250)
+                        new_pic.thumbnail(output_size)
+                        new_pic.save(
+                            gallery_img_instance.gallery_image.path)
+                    ###############################################
 
                 except UnidentifiedImageError:
                     messages.warning(request, 'Nie wszystkie zdjęcia zostały dodane!')

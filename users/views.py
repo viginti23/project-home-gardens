@@ -2,7 +2,6 @@ from home.decorators import unauthenticated_user
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
 from .forms import UserRegisterForm, UserLoginForm, UserUpdateForm, AccountForm
 from django.contrib import messages
 from home.models import Offer
@@ -66,6 +65,7 @@ def my_account(request, pk):
                     offer_obj = Offer.objects.get(id=int(ID))
                     offer_obj.delete()
                 ########################################################
+            return redirect('account', pk=pk)
 
         else:
             user_update_form = UserUpdateForm(instance=request.user)
