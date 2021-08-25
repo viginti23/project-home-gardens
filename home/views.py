@@ -64,6 +64,7 @@ class OfferListView(ListView):
     template_name = 'home/offer_list_view.html'
     context_object_name = 'offers'
     ordering = ['-date_posted']
+    paginate_by = 10
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()

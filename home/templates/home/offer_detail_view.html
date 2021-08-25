@@ -1,9 +1,10 @@
 {% extends "home/base.html" %}
 {% load static %}
 {% block content %}
-<div class="content-section container">
 
-    <div class="row">
+<div class="row">
+    <div class="content-section container">
+
         <div class="col-12 mx-auto">
 
             <!-- OFFER HEADERS -->
@@ -61,7 +62,7 @@
                                         </div>
                                     {% else %}
                                         <div class="carousel-item">
-                                            <a href='{{ offer_image.image.url }}'>
+                                            <a href='{{ offer_image.image.url }}' target="_blank">
                                                 <img class='img-fluid ' src='{{ offer_image.offergalleryimage.gallery_image.url }}' alt="..."></a>
                                         </div>
                                     {% endif %}
