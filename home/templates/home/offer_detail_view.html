@@ -56,8 +56,8 @@
                                 {% for offer_image in full_images %}
                                     {% if forloop.first %}
                                         <div class="carousel-item active">
-                                            <a href='{{ offer_image.image.url }}'>
-                                                <img class='img-fluid ' src="{{ offer_image.offergalleryimage.gallery_image.url }}" alt="..."></a>
+                                            <a href='{{ offer_image.image.url }}' target="_blank">
+                                                <img class='img-fluid' src="{{ offer_image.offergalleryimage.gallery_image.url }}" alt="..."></a>
                                         </div>
                                     {% else %}
                                         <div class="carousel-item">

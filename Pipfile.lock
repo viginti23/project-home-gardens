@@ -92,10 +92,10 @@
         },
         "phonenumbers": {
             "hashes": [
-                "sha256:9ca65c36f437881a8f7dac979a5733ae8fb5a0a436aecd47bd2c06494bdf0a20",
-                "sha256:f059f0555f1e47591406729b9e516af417e6a61aa0a5458fd01b2548232715e0"
+                "sha256:091ed2b3158567f12c99f719570a1ccace00179f39b44f1e6b895f59d93dadc8",
+                "sha256:3ede2a2fce9b2ed335c0168e8276546d717fceeffe23761877925dff0a8f54f1"
             ],
-            "version": "==8.12.30"
+            "version": "==8.12.31"
         },
         "pillow": {
             "hashes": [
