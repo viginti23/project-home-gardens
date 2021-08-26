@@ -7,7 +7,8 @@ from django.contrib import messages
 from django.views.generic import ListView, DeleteView
 from PIL import Image, UnidentifiedImageError
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-
+from django.core.paginator import Paginator
+import copy
 
 @login_required(login_url='login')
 def offer_form_view(request):
@@ -66,11 +67,17 @@ class OfferListView(ListView):
     ordering = ['-date_posted']
     paginate_by = 10
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data()
+    def get_queryset(self):
+        offers = super().get_queryset()
         search_input = self.request.GET.get('searchform') or ''
         if search_input:
-            context['offers'] = context['offers'].filter(title__icontains=search_input)
+            offers = offers.filter(title__icontains=search_input)
+            return offers
+        return offers
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+
         return context
 
 

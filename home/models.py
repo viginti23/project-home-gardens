@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.urls import reverse
 
+
 class Offer(models.Model):
     SIZE_CHOICES = [
         ('Roślina mała', 'Roślina mała'),
