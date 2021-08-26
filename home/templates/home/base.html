@@ -1,3 +1,4 @@
+{% load crispy_forms_filters %}
 <!DOCTYPE html>
 {% load static %}
 {% load bootstrap_icons %}
@@ -40,14 +41,28 @@
 
         <!-- COLLAPSABLE NAVBAR -->
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="d-flex justify-content-center">
+                <!-- SEARCH FORM -->
+                <form method='GET'>
+                    <input class="form-control me-2" type="search" name='searchform'
+                           placeholder="Znajdź swoją roślinę!" aria-label="Search">
+                    <input class="btn btn-outline-success" value='searchbutton' type="hidden" placeholder="Opcje">
+                </form>
+                <!-- DROPDOWN SEARCH DETAILS  -->
+                <button class="btn btn-primary dropdown-toggle" style="margin-left: -15px" type="button"
+                            id="dropdownMenuClickableOutside" data-bs-toggle="dropdown"
+                            data-bs-auto-close="inside" aria-expanded="false">{% bs_icon 'search' %}
+                </button>
+                <div class="dropdown-menu container-fluid" aria-labelledby="dropdownMenuClickableOutside">
+                    <form method="GET">
+                        {{ offer_filter.form.as_table }}
+                        {# MIEJSCE NA FILTRY !!!!!!!!!!!!!!!!!!!!!! #}
+                        <button type="submit" class="btn btn-primary" value="detailsearchbutton">Szukaj</button>
+                    </form>
+                </div>
+            </div>
 
-            <!-- SEARCH FORM -->
-            <form method='GET' class="d-flex">
-                <input class="form-control me-2" type="search" name='searchform'
-                       placeholder="Znajdź swoją roślinę!" aria-label="Search">
-                <input class="btn btn-outline-success" value='searchbutton' type="hidden" placeholder="Opcje">
-            </form>
-            <!-- Search details  -->
+
 
             <!-- Navbar Right Side -->
             <ul class="nav nav-pills nav ms-auto">
@@ -98,10 +113,11 @@
 
     {### PAGINATION ####}
     {% if is_paginated %}
-        <div class="container-fluid fixed-bottom p-0 " style="margin-top: 100px">
+        <div class="container fixed-bottom p-0 " style="margin-top: 100px">
             <div class="d-flex justify-content-center" style="padding: -15px">
+
                 {% if page_obj.has_previous %}
-                    <a class="btn btn-primary m-1 transbox" href="?page=1">
+                    <a class="btn btn-primary m-1 transbox d-none d-sm-block" href="?page=1">
                         Pierwsza</a>
                     <a class="btn btn-primary m-1 transbox" href="?page={{ page_obj.previous_page_number }}">
                         Poprzednia</a>
@@ -118,7 +134,7 @@
                 {% if page_obj.has_next %}
                     <a class="btn btn-primary m-1 transbox" href="?page={{ page_obj.next_page_number }}">
                         Następna</a>
-                    <a class="btn btn-primary m-1 transbox" href="?page={{ page_obj.paginator.num_pages }}">
+                    <a class="btn btn-primary m-1 transbox d-none d-sm-block" href="?page={{ page_obj.paginator.num_pages }}">
                         Ostatnia</a>
                 {% endif %}
             </div>

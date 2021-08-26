@@ -7,8 +7,8 @@ from django.contrib import messages
 from django.views.generic import ListView, DeleteView
 from PIL import Image, UnidentifiedImageError
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.core.paginator import Paginator
-import copy
+from .filters import OfferFilter
+
 
 @login_required(login_url='login')
 def offer_form_view(request):
@@ -70,16 +70,21 @@ class OfferListView(ListView):
     def get_queryset(self):
         offers = super().get_queryset()
         search_input = self.request.GET.get('searchform') or ''
+        detail_search_input = self.request.GET.get('detailsearchform') or ''
+
         if search_input:
-            offers = offers.filter(title__icontains=search_input)
+            offers = offers.filter(title__icontains=search_input).order_by('-date_posted')
             return offers
+        elif detail_search_input:
+            offer_filter = OfferFilter(self.request.GET, queryset=offers)
+            offers = offer_filter.qs
         return offers
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data()
-
+        context = super().get_context_data(**kwargs)
+        offer_filter = OfferFilter(self.request.GET, queryset=context['offers'])
+        context['offer_filter'] = offer_filter
         return context
-
 
 class OfferUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     fields = ['title', 'description', 'negotiable', 'price']
