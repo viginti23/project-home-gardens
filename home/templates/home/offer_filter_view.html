@@ -1,0 +1,41 @@
+{% extends "home/base.html" %}
+{% block content %}
+    <div class="row">
+        <div class="col-auto mx-auto">
+            <form method="GET" class="">
+                {% for field in offer_filter.form %}
+                    {% if field.name == 'start_date' %}
+                        {{ field.label }}
+                                                {% for element in field %}
+
+                        <div class="d-flex justify-content-around text-center">
+                                {{ element.name }}
+                                {{ element }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {% if field.name == 'start_date' %}
+                        {{ field.label }}
+                        {% for element in field %}
+
+                            <div class="d-flex justify-content-around text-center">
+                                {{ element.name }}
+                                {{ element }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    {% if field.name != 'title' and field.name != 'start_date' and field.name != 'end_date' %}
+                        <div class=" form-control">
+                            {{ field.label }}
+                            {{ field }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                <input type="submit" class="btn btn-primary mx-auto"
+                       name='detailsearchbutton' value='Szukaj'>
+            </form>
+        </div>
+    </div>
+{% endblock content %}

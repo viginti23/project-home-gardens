@@ -19,6 +19,14 @@ ul {
 div {
   outline: solid 1px red;
 }
+.button-search-right {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+}
+.button-search-left {
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+}
 
 .transbox {
   opacity: 0.6;

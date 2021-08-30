@@ -5,6 +5,10 @@ from django.urls import reverse
 
 
 class Offer(models.Model):
+    BOOLEAN_CHOICES = [
+        ('Tak', 'Tak'),
+        ('Nie', 'Nie')
+    ]
     SIZE_CHOICES = [
         ('Roślina mała', 'Roślina mała'),
         ('Roślina średnia', 'Roślina średnia'),
@@ -21,7 +25,7 @@ class Offer(models.Model):
     description = models.TextField(
         max_length=1024, verbose_name="Opis:", null=True, blank=True)
     price = models.FloatField(verbose_name="Cena:", null=True, blank=False)
-    negotiable = models.BooleanField(verbose_name='Do negocjacji', default=False)
+    negotiable = models.BooleanField(choices=BOOLEAN_CHOICES, verbose_name='Cena do negocjacji', default=False)
     seller = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Sprzedawca: ')
     date_posted = models.DateTimeField(default=timezone.now)
     size_category = models.CharField(max_length=64, verbose_name='Wielkość rośliny:', null=True, blank=False,
@@ -29,9 +33,9 @@ class Offer(models.Model):
     maintenance_category = models.CharField(max_length=64, verbose_name='Pielęgnacja rośliny:', null=True, blank=False,
                                             choices=MAINTENANCE_CHOICES)
 
-    indoor = models.BooleanField(blank=False, null=True, verbose_name='Roślina outdoorowa:', default=False)
-    outdoor = models.BooleanField(blank=False, null=True, verbose_name='Roślina indoorowa:', default=False)
-    pet_friendly = models.BooleanField(blank=False, null=True,
+    indoor = models.BooleanField(choices=BOOLEAN_CHOICES, blank=False, null=True, verbose_name='Roślina outdoorowa:', default=False)
+    outdoor = models.BooleanField(choices=BOOLEAN_CHOICES,blank=False, null=True, verbose_name='Roślina indoorowa:', default=False)
+    pet_friendly = models.BooleanField(choices=BOOLEAN_CHOICES, blank=False, null=True,
                                        verbose_name="Roślina przyjazna zwierzętom:", default=False)
 
     location = models.CharField(

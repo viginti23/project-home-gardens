@@ -41,28 +41,18 @@
 
         <!-- COLLAPSABLE NAVBAR -->
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="d-flex justify-content-center">
+            <div class="d-flex cont">
                 <!-- SEARCH FORM -->
                 <form method='GET'>
-                    <input class="form-control me-2" type="search" name='searchform'
+                    <input class="form-control me-2 button-search-right" type="search"
                            placeholder="Znajdź swoją roślinę!" aria-label="Search">
-                    <input class="btn btn-outline-success" value='searchbutton' type="hidden" placeholder="Opcje">
+                    <input class="btn btn-outline-success" name='titlesearch' type="hidden" placeholder="Opcje">
                 </form>
                 <!-- DROPDOWN SEARCH DETAILS  -->
-                <button class="btn btn-primary dropdown-toggle" style="margin-left: -15px" type="button"
-                            id="dropdownMenuClickableOutside" data-bs-toggle="dropdown"
-                            data-bs-auto-close="inside" aria-expanded="false">{% bs_icon 'search' %}
-                </button>
-                <div class="dropdown-menu container-fluid" aria-labelledby="dropdownMenuClickableOutside">
-                    <form method="GET">
-                        {{ offer_filter.form.as_table }}
-                        {# MIEJSCE NA FILTRY !!!!!!!!!!!!!!!!!!!!!! #}
-                        <button type="submit" class="btn btn-primary" value="detailsearchbutton">Szukaj</button>
-                    </form>
-                </div>
+                <a href="{% url 'offerfilter' %}" class="btn button-search-left btn-primary dropdown-toggle"  type="button">
+                    {% bs_icon 'search' %}
+                </a>
             </div>
-
-
 
             <!-- Navbar Right Side -->
             <ul class="nav nav-pills nav ms-auto">

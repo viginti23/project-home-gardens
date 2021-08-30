@@ -14,13 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from home.views import offer_detail_view, offer_form_view, OfferListView, OfferUpdateView, OfferDeleteView
+from home.views import offer_detail_view, \
+    offer_form_view, OfferListView, OfferUpdateView, OfferDeleteView, OfferFilterListView
 
 urlpatterns = [
     path('new/', offer_form_view, name='offercreate'),
     path('', OfferListView.as_view(), name='offerlist'),
     path('offer/<int:pk>/', offer_detail_view, name='offerdetail'),
-    path('offer/update/<int:pk>/', OfferUpdateView.as_view(), name = 'offerupdate'),
+    path('offer/update/<int:pk>/', OfferUpdateView.as_view(), name='offerupdate'),
     path('offer/del/<int:pk>/', OfferDeleteView.as_view(), name='offerdelete'),
-
+    path('offer_filter/', OfferFilterListView.as_view(), name='offerfilter'),
 ]

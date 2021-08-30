@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.views.generic import ListView, DeleteView
 from PIL import Image, UnidentifiedImageError
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from .filters import OfferFilter
+from .filters import OfferFilter, TitleFilter
 
 
 @login_required(login_url='login')
@@ -60,6 +60,26 @@ def offer_detail_view(request, pk, *args, **kwargs):
         return render(request, template, context)
 
 
+class OfferFilterListView(ListView):
+    model = Offer
+    template_name = 'home/offer_filter_view.html'
+    context_object_name = 'offers'
+    ordering = ['-date_posted']
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        detail_search_button = self.request.GET.get('detailsearchform') or ''
+        if detail_search_button:
+            offer_filter = OfferFilter(self.request.GET, queryset=queryset)
+            queryset = offer_filter.qs.distinct()
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context['offer_filter'] = OfferFilter(self.request.GET, queryset=self.get_queryset())
+        return context
+
+
 class OfferListView(ListView):
     model = Offer
     template_name = 'home/offer_list_view.html'
@@ -67,24 +87,6 @@ class OfferListView(ListView):
     ordering = ['-date_posted']
     paginate_by = 10
 
-    def get_queryset(self):
-        offers = super().get_queryset()
-        search_input = self.request.GET.get('searchform') or ''
-        detail_search_input = self.request.GET.get('detailsearchform') or ''
-
-        if search_input:
-            offers = offers.filter(title__icontains=search_input).order_by('-date_posted')
-            return offers
-        elif detail_search_input:
-            offer_filter = OfferFilter(self.request.GET, queryset=offers)
-            offers = offer_filter.qs
-        return offers
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        offer_filter = OfferFilter(self.request.GET, queryset=context['offers'])
-        context['offer_filter'] = offer_filter
-        return context
 
 class OfferUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     fields = ['title', 'description', 'negotiable', 'price']
