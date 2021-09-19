@@ -13,18 +13,17 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.contrib import admin
 from django.urls import path
-from home.views import offer_form_view, OfferListView, offer_detail_view,OfferUpdateView, OfferDeleteView, AboutView, BlogView
+from django.urls.conf import include
+from .views import apiOverview, offer_list, offer_create, offer_detail, offer_delete, offer_update
 
 urlpatterns = [
-    # GENERAL PAGES
-    path('about/', AboutView.as_view(), name='about'),
-    path('blog/', BlogView.as_view(), name='blog'),
+    path('', apiOverview, name='api-overview'),
+    path('offer-list/', offer_list, name='offer-list'),
+    path('offer-create/', offer_create, name='offer-create'),
+    path('offer/<int:pk>/', offer_detail, name='offer-detail'),
+    path('offer/update/<int:pk>/', offer_update, name='offer-update'),
+    path('offer/del/<int:pk>/', offer_delete, name='offer-delete'),
 
-    # OFFERS
-    path('new/', offer_form_view, name='offercreate'),
-    path('', OfferListView.as_view(), name='offerlist'),
-    path('offer/<int:pk>/', offer_detail_view, name='offerdetail'),
-    path('offer/update/<int:pk>/', OfferUpdateView.as_view(), name='offerupdate'),
-    path('offer/del/<int:pk>/', OfferDeleteView.as_view(), name='offerdelete'),
 ]

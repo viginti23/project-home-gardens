@@ -11,6 +11,7 @@ django-bootstrap-icons = "*"
 django-phonenumber-field = {extras = ["phonenumbers"], version = "*"}
 django-cleanup = "*"
 django-livesync = "*"
+djangorestframework = "*"
 
 [dev-packages]
 

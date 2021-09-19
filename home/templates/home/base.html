@@ -41,67 +41,19 @@
 
         <!-- COLLAPSABLE NAVBAR -->
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="d-flex cont">
+            <div class="d-flex ">
                 <!-- SEARCH FORM -->
                 <form method='GET'>
                     <input class="form-control me-2 button-search-right" type="search" name='titlesearch'
                            placeholder="Znajdź swoją roślinę!" aria-label="Search">
                     <input class="btn" placeholder="Opcje" type="hidden">
-{#                    {{ title_filter.form }}#}
                 </form>
-                <!-- SEARCH BY DETAILS  -->
-{#                <div class="dropdown">#}
-{#                    <button class="btn button-search-left btn-primary dropdown-toggle" type="button"#}
-{#                     id="detailSearchDropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">#}
-{#                        {% bs_icon 'search' %}#}
-{#                    </button>#}
-{#                    <div class="dropdown-menu content-section" aria-labelledby="detailSearchDropdownMenu">#}
-{#                       #}
-{#                    </div>#}
-{#                </div>#}
-
-
-                <div class="dropdown">
-                    <button class="btn btn-primary button-search-left dropdown-toggle" type="button"
-                            id="detailSearchDropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
-                        {% bs_icon 'search' %}
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="detailSearchDropdownMenu">
-                        <form method="GET" class="px-4 py-3">
-                            {% for field in offer_filter.form %}
-                                {% if field.name == 'start_date' %}
-                                    <h6>{{ field.label }}</h6>
-                                    {% for element in field %}
-                                        {{ element }}
-                                     {% endfor %}
-                                {% endif %}
-
-                                {% if field.name == 'end_date' %}
-                                    <h6>{{ field.label }}</h6>
-                                    {% for element in field %}
-                                            {{ element }}
-                                    {% endfor %}
-                                {% endif %}
-
-                                {% if field.name != 'title' and field.name != 'start_date' and field.name != 'end_date' %}
-                                    <div class="form-control">
-                                        {{ field.label }}
-                                        {{ field }}
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
-                            <div class="container d-flex justify-content-center">
-                                <button type="submit" class="btn btn-primary m-2"
-                                name='detailsearchbutton' value='Szukaj'>Szukaj</button>
-                            </div>
-                        </form>
-                        <a class="dropdown-item active" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                        <hr class="dropdown-divider">
-                        <a class="dropdown-item" href="#">Separated link</a>
-                </div>
-                </div>
+                <!-- SEARCH BY DETAILS BUTTON -->
+                <button data-bs-target="#detailSearchDropdownMenu"
+                        class="btn btn-primary button-search-left" type="button"
+                        data-bs-toggle="collapse" aria-expanded="false" name="detailsearch">
+                    {% bs_icon 'search' %}
+                </button>
             </div>
 
             <!-- Navbar Right Side -->
@@ -139,12 +91,12 @@
                 {% endif %}
 
                 <li class="nav-item">
-                    <a class="nav-item nav-link btn" href="#">
+                    <a class="nav-item nav-link btn" href="{% url 'about' %}">
                         {% bs_icon 'hand-thumbs-up' %} O nas</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-item nav-link btn" href="#">
+                    <a class="nav-item nav-link btn" href="{% url 'blog' %}">
                          {% bs_icon 'book' %} Poradnik </a>
                 </li>
             </ul>
@@ -197,6 +149,41 @@
                 {% endif %}
             </div>
         </div>
+        <div class="row">
+            <form method="GET" class="collapse px-4 py-3 row" id="detailSearchDropdownMenu">
+                {% for field in offer_filter.form %}
+                    {% if field.name == 'start_date' %}
+                        <div class="col form-group mb-3">
+                            <h6>{{ field.label }}</h6>
+                            {% for element in field %}
+                                {{ element }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {% if field.name == 'end_date' %}
+                        <div class="col mb-3 form-group">
+                            <h6>{{ field.label }}</h6>
+                            {% for element in field %}
+                                    {{ element }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {% if field.name != 'title' and field.name != 'start_date' and field.name != 'end_date' %}
+                        <div class="col form-group  p-2">
+                            {{ field.label }}
+                            {{ field }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                <div class="container d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary m-2"
+                    name='detailsearchbutton' value='Szukaj'>Szukaj</button>
+                </div>
+            </form>
+        </div>
+
         {% block content %}
         {% endblock content %}
     </main>

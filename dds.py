@@ -1,12 +1,15 @@
 import json
 from home.models import Offer, OfferImage, OfferGalleryImage
 from django.utils import timezone
-
+import random
+from django.contrib.auth.models import User
 
 def sd():  # send_data():
+    USERS = User.objects.all()
     with open('offers.json', encoding='utf-8') as o:
         offers_json = json.load(o)
         for offer in offers_json:
+            offer['seller'] = random.choice(USERS)
             offer['date_posted'] = timezone.now()
             offer = Offer(
                 title=offer['title'],
@@ -20,6 +23,7 @@ def sd():  # send_data():
                 outdoor=offer['outdoor'],
                 pet_friendly=offer['pet_friendly'],
                 location=offer['location'],
+                seller=offer['seller'],
                 )
             offer.save()
 

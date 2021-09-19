@@ -34,6 +34,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'home.apps.HomeConfig',
     'users.apps.UsersConfig',
+    'api.apps.ApiConfig',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -51,6 +52,8 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'django_bootstrap_icons',
     'phonenumber_field',
+
+    'rest_framework',
 
 
 ]

@@ -4,11 +4,19 @@ from .models import Offer, OfferGalleryImage, OfferImage
 from django.contrib.auth.decorators import login_required
 from .forms import CreateOfferForm, CreateOfferImageForm, UpdateOfferImageForm
 from django.contrib import messages
-from django.views.generic import ListView, DeleteView, FormView
+from django.views.generic import ListView, DeleteView, TemplateView
 from PIL import Image, UnidentifiedImageError
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .filters import OfferFilter
 from django.template.response import TemplateResponse
+
+
+class AboutView(TemplateView):
+    template_name = 'home/about.html'
+
+class BlogView(TemplateView):
+    template_name = 'home/blog.html'
+
 
 @login_required(login_url='login')
 def offer_form_view(request):
@@ -56,7 +64,7 @@ def offer_detail_view(request, pk, *args, **kwargs):
         obj = Offer.objects.get(id=pk)
         context['object'] = obj
         context['full_images'] = OfferImage.objects.filter(offer=obj)
-        print(context['offer_filter'])
+        # print(context['offer_filter'])
         return TemplateResponse(request, template, context)
 
 
@@ -71,11 +79,9 @@ class OfferListView(ListView):
     def get_queryset(self):
         queryset = super().get_queryset()
         titlesearch = self.request.GET.get('titlesearch') or ''
-        # print(titlesearch)
-        # title_filter = TitleFilter(self.request.GET, queryset=queryset)
-        # queryset = title_filter.qs
-        # if coming from certain address:
-        queryset = Offer.objects.filter(title__icontains=titlesearch)
+        queryset = queryset.filter(title__icontains=titlesearch)
+        offer_filter = OfferFilter(self.request.GET, queryset=queryset)
+        queryset = offer_filter.qs
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -83,10 +89,6 @@ class OfferListView(ListView):
         # context['offer_filter'] = OfferFilter(self.request.GET, queryset=self.get_queryset())
         return context
 
-    # def get(self, **kwargs):
-
-# class OfferFilterView(ListView):
-#     template_name = 'home/offer_filter_view.html'
 
 class OfferUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     fields = ['title', 'description', 'negotiable', 'price']

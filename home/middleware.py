@@ -1,5 +1,6 @@
 from .filters import OfferFilter
 
+
 class DetailSearchFilterMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
@@ -10,5 +11,6 @@ class DetailSearchFilterMiddleware:
         return response
 
     def process_template_response(self, request, response):
-        response.context_data['offer_filter'] = self.offer_filter
+        if response.context_data:
+            response.context_data['offer_filter'] = self.offer_filter
         return response

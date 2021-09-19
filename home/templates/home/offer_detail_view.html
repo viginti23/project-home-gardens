@@ -106,14 +106,23 @@
                 <div class="tab-pane fade" id="seller" role="tabpanel" aria-labelledby="seller-tab">
 
                     <div class="dropdown">
+
+                        <h3>
+                            Sprzedający: <a href="{% url 'profile' object.seller.pk %}">{{ object.seller.username }}</a>
+                        </h3>
+                        <h3>
+                            Numer telefonu: {{ object.seller.account.phone_number }}
+                        </h3>
                         <a class="btn btn-info dropdown-toggle"
-                           href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
-                            aria-expanded="false">
+                           role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
+                           aria-expanded="false">
                             Zobacz inne ogłoszenia tego sprzedającego
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                             {% for offer in object.seller.offer_set.all %}
-                            <li><a class="dropdown-item" href="{% url 'offerdetail' offer.id %}">{{ offer.title }}</a></li>
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'offerdetail' offer.id %}">{{ offer.title }}</a>
+                                </li>
                             {% endfor %}
                         </ul>
                     </div>
