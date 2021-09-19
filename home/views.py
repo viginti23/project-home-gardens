@@ -1,10 +1,10 @@
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import redirect, render
 from django.views.generic.edit import UpdateView
 from .models import Offer, OfferGalleryImage, OfferImage
 from django.contrib.auth.decorators import login_required
 from .forms import CreateOfferForm, CreateOfferImageForm, UpdateOfferImageForm
 from django.contrib import messages
-from django.views.generic import ListView, DeleteView
+from django.views.generic import ListView, DeleteView, FormView
 from PIL import Image, UnidentifiedImageError
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .filters import OfferFilter, TitleFilter
@@ -13,41 +13,40 @@ from .filters import OfferFilter, TitleFilter
 @login_required(login_url='login')
 def offer_form_view(request):
     if request.method == 'POST':
-        offer_form = CreateOfferForm(
-            request.POST)
+        offer_form = CreateOfferForm(request.POST)
         image_form = CreateOfferImageForm(request.POST, request.FILES)
         pics = request.FILES.getlist('image')
 
         if offer_form.is_valid() and image_form.is_valid():
-            offer_instance = offer_form.save(commit=False)
+            offer_instance = offer_form.instance
             offer_instance.seller_id = request.user.id
             offer_instance.save()
             for pic in pics:
                 try:
-                    img_instance = OfferImage(image=pic, offer=offer_instance)
-                    img_instance.save()
-                    #### SIGNALS ######
+                    img_instance = OfferImage.objects.create(offer=offer_instance, image=pic)
+                    # img_instance = OfferImage(image=pic, offer=offer_instance)
+                    # img_instance.save()
+                    # SIGNALS
                     gallery_img_instance = OfferGalleryImage(
                         gallery_image=pic, offer=offer_instance, offer_image=img_instance)
                     gallery_img_instance.save()
 
-                    ############### RESIZING IMAGES ###############
+                    # RESIZING IMAGES
                     new_pic = Image.open(gallery_img_instance.gallery_image.path)
                     if new_pic.width > 500 or new_pic.height > 250:
                         output_size = (500, 250)
                         new_pic.thumbnail(output_size)
-                        new_pic.save(
-                            gallery_img_instance.gallery_image.path)
-                    ###############################################
+                        new_pic.save(gallery_img_instance.gallery_image.path)
                 except UnidentifiedImageError:
                     messages.warning(
                         request, 'Nie wszystkie zdjęcia zostały dodane!')
-                    continue
             messages.success(request, 'Ogłoszenie zostało pomyślnie dodane!')
             return redirect('offerdetail', pk=offer_instance.id)
     offer_form = CreateOfferForm()
     image_form = CreateOfferImageForm()
-    return render(request, 'home/offer_form_view.html', {'offer_form': offer_form, 'image_form': image_form})
+    context = {'offer_form': offer_form, 'image_form': image_form}
+    template = 'home/offer_form_view.html'
+    return render(request, template, context)
 
 
 def offer_detail_view(request, pk, *args, **kwargs):
@@ -60,26 +59,6 @@ def offer_detail_view(request, pk, *args, **kwargs):
         return render(request, template, context)
 
 
-class OfferFilterListView(ListView):
-    model = Offer
-    template_name = 'home/offer_filter_view.html'
-    context_object_name = 'offers'
-    ordering = ['-date_posted']
-
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        detail_search_button = self.request.GET.get('detailsearchform') or ''
-        if detail_search_button:
-            offer_filter = OfferFilter(self.request.GET, queryset=queryset)
-            queryset = offer_filter.qs.distinct()
-        return queryset
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data()
-        context['offer_filter'] = OfferFilter(self.request.GET, queryset=self.get_queryset())
-        return context
-
-
 class OfferListView(ListView):
     model = Offer
     template_name = 'home/offer_list_view.html'
@@ -87,13 +66,33 @@ class OfferListView(ListView):
     ordering = ['-date_posted']
     paginate_by = 10
 
+    # def get_queryset(self):
+    #     queryset = super().get_queryset()
+    #     titlesearch = self.request.GET.get('titlesearch') or ''
+    #     print(titlesearch)
+    #     if titlesearch:
+    #         title_filter = TitleFilter(self.request.GET, queryset=queryset)
+    #         queryset = title_filter.qs.distinct()
+    #     # if coming from certain address:
+    #
+    #     return queryset
+    #
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data()
+    #     context['title_filter'] = TitleFilter(self.request.GET, queryset=self.get_queryset())
+    #     return context
+
+    # def get(self, **kwargs):
+
+class OfferFilterView(ListView):
+    template_name = 'home/offer_filter_view.html'
 
 class OfferUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     fields = ['title', 'description', 'negotiable', 'price']
     model = Offer
     template_name = 'home/offer_update_view.html'
 
-    def get(self, request, pk, *args, **kwargs):
+    def get(self, pk, **kwargs):
         offer = Offer.objects.get(id=pk)
         offer_form = CreateOfferForm(instance=offer)
 
@@ -102,41 +101,37 @@ class OfferUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         current_imgs_urls = []
 
         for offer_image in offer.offerimage_set.all():
-            image_form = UpdateOfferImageForm(request.POST, request.FILES, instance=offer_image)
+            image_form = UpdateOfferImageForm(self.request.POST, self.request.FILES, instance=offer_image)
             current_imgs_forms.append(image_form)
             current_imgs.append(offer_image.offergalleryimage)
             current_imgs_urls.append(offer_image.offergalleryimage.gallery_image.url)
 
         new_image_form = CreateOfferImageForm()
 
-        template = 'home/offer_update_view.html'
-        context = {}
-        context['offer_form'] = offer_form
-        context['current_imgs_urls'] = current_imgs_urls
-        context['current_imgs'] = current_imgs
-        context['current_imgs_forms'] = current_imgs_forms
-        context['new_image_form'] = new_image_form
-        return render(request, template, context)
+        template = self.template_name
+        context = {'offer_form': offer_form, 'current_imgs_urls': current_imgs_urls, 'current_imgs': current_imgs,
+                   'current_imgs_forms': current_imgs_forms, 'new_image_form': new_image_form}
+        return render(self.request, template, context)
 
-    def post(self, request, pk, *args, **kwargs):
-        if request.method == 'POST':
+    def post(self, pk, **kwargs):
+        if self.request.method == 'POST':
             offer_instance = None
             offer = Offer.objects.get(id=pk)
-            offer_form = CreateOfferForm(request.POST, instance=offer)
+            offer_form = CreateOfferForm(self.request.POST, instance=offer)
             if offer_form.is_valid():
                 offer_instance = offer_form.save(commit=False)
-                offer_instance.seller_id = request.user.id
+                offer_instance.seller_id = self.request.user.id
                 offer_instance.save()
-                self.get(request, pk)
+                self.get(pk)
 
             ############## DELETE SELECTED IMAGES ##################
-            images_IDs_to_delete = request.POST.getlist('delete')
+            images_IDs_to_delete = self.request.POST.getlist('delete')
             for ID in images_IDs_to_delete:
                 offerimage_obj = OfferImage.objects.get(id=int(ID))
                 offerimage_obj.delete()
             ########################################################
 
-            pics = request.FILES.getlist('image')
+            pics = self.request.FILES.getlist('image')
             for pic in pics:
                 try:
                     img_instance = OfferImage(image=pic, offer=offer_instance)
@@ -157,11 +152,11 @@ class OfferUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
                     ###############################################
 
                 except UnidentifiedImageError:
-                    messages.warning(request, 'Nie wszystkie zdjęcia zostały dodane!')
+                    messages.warning(self.request, 'Nie wszystkie zdjęcia zostały dodane!')
                     continue
-            messages.success(request, 'Ogłoszenie zostało pomyślnie uaktualnione!')
+            messages.success(self.request, 'Ogłoszenie zostało pomyślnie uaktualnione!')
             return redirect('offerdetail', pk=offer_instance.id)
-        self.get(request, pk)
+        self.get(pk)
 
     def form_valid(self, form):
         form.instance.seller = self.request.user

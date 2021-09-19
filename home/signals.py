@@ -10,8 +10,8 @@ from PIL import Image
 #     if created:
 #         ins = OfferGalleryImage.objects.create(
 #             offer_image=instance, gallery_image=instance.image, offer=instance.offer)
-#         ins.save(commit=False)
-#
+#         ins.save()
+# #
 #
 # @receiver(post_save, sender=OfferImage)
 # def save_offer_gallery_image(sender, instance, **kwargs):

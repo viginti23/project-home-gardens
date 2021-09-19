@@ -2,7 +2,6 @@
 {% block content %}
     <div class="row d-flex justify-content-center">
 
-
         {#### CONTENT ###}
         {% for offer in offers %}
             <div class="col-10 col-sm-8 col-md-6 col-lg-4 col-xl-3">
@@ -12,7 +11,7 @@
                         <h3>{{ offer.title }}</h3>
                     </div>
                     <a href="{{ offer.get_absolute_url }}">
-                        <img src="{{ offer.offergalleryimage_set.all.first.gallery_image.url }}"
+                        <img src="{{ offer.offergalleryimage_set.first.gallery_image.url }}"
                         class="card-img-top img-fluid mx-auto mw-100"
                         alt="cover-photo"></a>
                     <div class="card-body mx-auto">
@@ -33,5 +32,7 @@
                 </div>
             </div>
         {% endfor %}
+        {### ###}
+
     </div>
 {% endblock content %}

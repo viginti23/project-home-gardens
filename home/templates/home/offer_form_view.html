@@ -2,18 +2,18 @@
 {% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
 {% block content %}
-  <div class="content-section">
-    <form method="POST" enctype="multipart/form-data">
-      {% csrf_token %}
-        <legend class="border-bottom mb-4 text-center h3 p-4">Co dziś sprzedasz?</legend>
-        <div class='p-3'>
-          {{ offer_form | crispy }}
-          {{ image_form | crispy }}
-        </div>
+    <div class="content-section">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <legend class="border-bottom mb-4 text-center h3 p-4">Co dziś sprzedasz?</legend>
+            <div class='p-3'>
+            {{ offer_form | crispy }}
+            {{ image_form | crispy }}
+            </div>
 
-      <div class="form-group">
-        <button class="btn btn-success form-group d-grid gap-2 mx-auto mb-4 px-4 py-2" type="submit">Dodaj!</button>
-      </div>
-    </form>
-  </div>
+            <div class="form-group">
+                <button class="btn btn-success form-group d-grid gap-2 mx-auto mb-4 px-4 py-2" type="submit">Dodaj!</button>
+            </div>
+        </form>
+    </div>
 {% endblock content %}

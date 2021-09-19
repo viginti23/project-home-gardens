@@ -16,9 +16,27 @@ ul {
   margin: 0;
 }
 
+
+
 div {
   outline: solid 1px red;
 }
+
+div.row {
+    outline: solid 1px blue;
+}
+
+div.col {
+    outline: solid 1px green;
+}
+
+
+
+.button-search-detail {
+    align-content: center;
+}
+
+
 .button-search-right {
     border-bottom-right-radius: 0;
     border-top-right-radius: 0;

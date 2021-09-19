@@ -25,21 +25,19 @@ class Offer(models.Model):
     description = models.TextField(
         max_length=1024, verbose_name="Opis:", null=True, blank=True)
     price = models.FloatField(verbose_name="Cena:", null=True, blank=False)
-    negotiable = models.BooleanField(choices=BOOLEAN_CHOICES, verbose_name='Cena do negocjacji', default=False)
-    seller = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Sprzedawca: ')
+
+    size_category = models.CharField(max_length=64, verbose_name='Wielkość rośliny:', choices=SIZE_CHOICES, default=SIZE_CHOICES[-1])
+    maintenance_category = models.CharField(max_length=64, verbose_name='Pielęgnacja rośliny:', choices=MAINTENANCE_CHOICES, default=MAINTENANCE_CHOICES[-1])
+
+    negotiable = models.BooleanField(verbose_name='Cena do negocjacji:', default=False, null=True)
+    indoor = models.BooleanField(verbose_name='Roślina outdoorowa:', default=False, null=True)
+    outdoor = models.BooleanField(verbose_name='Roślina indoorowa:', default=False, null=True)
+    pet_friendly = models.BooleanField(verbose_name="Roślina przyjazna zwierzętom:", default=False, null=True)
+
+    seller = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Sprzedawca:')
     date_posted = models.DateTimeField(default=timezone.now)
-    size_category = models.CharField(max_length=64, verbose_name='Wielkość rośliny:', null=True, blank=False,
-                                     choices=SIZE_CHOICES)
-    maintenance_category = models.CharField(max_length=64, verbose_name='Pielęgnacja rośliny:', null=True, blank=False,
-                                            choices=MAINTENANCE_CHOICES)
 
-    indoor = models.BooleanField(choices=BOOLEAN_CHOICES, blank=False, null=True, verbose_name='Roślina outdoorowa:', default=False)
-    outdoor = models.BooleanField(choices=BOOLEAN_CHOICES,blank=False, null=True, verbose_name='Roślina indoorowa:', default=False)
-    pet_friendly = models.BooleanField(choices=BOOLEAN_CHOICES, blank=False, null=True,
-                                       verbose_name="Roślina przyjazna zwierzętom:", default=False)
-
-    location = models.CharField(
-        max_length=100, verbose_name="Lokalizacja:", null=True, blank=True)
+    location = models.CharField(max_length=100, verbose_name="Lokalizacja:", null=True, blank=True)
 
     def __str__(self):
         return f'{self.title}'
@@ -52,8 +50,7 @@ class OfferImage(models.Model):
     image = models.ImageField(verbose_name="  ",
                               upload_to='products_pics/', default='products_pics/default.png')
 
-    offer = models.ForeignKey(
-        Offer, on_delete=models.CASCADE, null=True)
+    offer = models.ForeignKey(Offer, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
         return f'{self.offer.title} - Photo'

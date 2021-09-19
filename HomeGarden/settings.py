@@ -40,16 +40,23 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+
+    'livesync',  # refreshes server after changes
     'django.contrib.staticfiles',
 
     'django_filters',
     'crispy_forms',
-    'django_cleanup',
+    'django_cleanup',  # deletes files after deleting objects
 
     'crispy_bootstrap5',
     'django_bootstrap_icons',
     'phonenumber_field',
+
+
 ]
+DJANGO_LIVESYNC = {
+    'PORT': 8000  # this is optional and is default set to 9001.
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -59,6 +66,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'livesync.core.middleware.DjangoLiveSyncMiddleware',
+
 ]
 
 ROOT_URLCONF = 'HomeGarden.urls'
