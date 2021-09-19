@@ -4,15 +4,15 @@ from django_filters import DateFilter, CharFilter, NumberFilter
 from django.forms.widgets import TextInput, NumberInput, DateInput, SelectDateWidget
 
 
-class TitleFilter(django_filters.FilterSet):
-    title = CharFilter(field_name='title', lookup_expr='icontains', label='Nazwa produktu',
-                       widget=TextInput(attrs={
-                           'placeholder': "Znajdź swoją roślinę!",
-                           'class': "form-control me-2 button-search-right"}))
-
-    class Meta:
-        model = Offer
-        fields = ['title']
+# class TitleFilter(django_filters.FilterSet):
+#     title = CharFilter(field_name='title', lookup_expr='icontains',
+#                        widget=TextInput(attrs={
+#                            'p laceholder': "Znajdź swoją roślinę!",
+#                            'class': "form-control me-2 button-search-right"}))
+#
+#     class Meta:
+#         model = Offer
+#         fields = ['title']
 
 
 class OfferFilter(django_filters.FilterSet):

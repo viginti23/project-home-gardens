@@ -26,8 +26,10 @@ class Offer(models.Model):
         max_length=1024, verbose_name="Opis:", null=True, blank=True)
     price = models.FloatField(verbose_name="Cena:", null=True, blank=False)
 
-    size_category = models.CharField(max_length=64, verbose_name='Wielkość rośliny:', choices=SIZE_CHOICES, default=SIZE_CHOICES[-1])
-    maintenance_category = models.CharField(max_length=64, verbose_name='Pielęgnacja rośliny:', choices=MAINTENANCE_CHOICES, default=MAINTENANCE_CHOICES[-1])
+    size_category = models.CharField(max_length=64, verbose_name='Wielkość rośliny:', choices=SIZE_CHOICES,
+                                     default=SIZE_CHOICES[-1])
+    maintenance_category = models.CharField(max_length=64, verbose_name='Pielęgnacja rośliny:',
+                                            choices=MAINTENANCE_CHOICES, default=MAINTENANCE_CHOICES[-1])
 
     negotiable = models.BooleanField(verbose_name='Cena do negocjacji:', default=False, null=True)
     indoor = models.BooleanField(verbose_name='Roślina outdoorowa:', default=False, null=True)

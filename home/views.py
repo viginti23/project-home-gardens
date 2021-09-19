@@ -7,8 +7,8 @@ from django.contrib import messages
 from django.views.generic import ListView, DeleteView, FormView
 from PIL import Image, UnidentifiedImageError
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from .filters import OfferFilter, TitleFilter
-
+from .filters import OfferFilter
+from django.template.response import TemplateResponse
 
 @login_required(login_url='login')
 def offer_form_view(request):
@@ -46,7 +46,7 @@ def offer_form_view(request):
     image_form = CreateOfferImageForm()
     context = {'offer_form': offer_form, 'image_form': image_form}
     template = 'home/offer_form_view.html'
-    return render(request, template, context)
+    return TemplateResponse(request, template, context)
 
 
 def offer_detail_view(request, pk, *args, **kwargs):
@@ -56,7 +56,8 @@ def offer_detail_view(request, pk, *args, **kwargs):
         obj = Offer.objects.get(id=pk)
         context['object'] = obj
         context['full_images'] = OfferImage.objects.filter(offer=obj)
-        return render(request, template, context)
+        print(context['offer_filter'])
+        return TemplateResponse(request, template, context)
 
 
 class OfferListView(ListView):
@@ -65,32 +66,33 @@ class OfferListView(ListView):
     context_object_name = 'offers'
     ordering = ['-date_posted']
     paginate_by = 10
+    response_class = TemplateResponse
 
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-    #     titlesearch = self.request.GET.get('titlesearch') or ''
-    #     print(titlesearch)
-    #     if titlesearch:
-    #         title_filter = TitleFilter(self.request.GET, queryset=queryset)
-    #         queryset = title_filter.qs.distinct()
-    #     # if coming from certain address:
-    #
-    #     return queryset
-    #
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data()
-    #     context['title_filter'] = TitleFilter(self.request.GET, queryset=self.get_queryset())
-    #     return context
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        titlesearch = self.request.GET.get('titlesearch') or ''
+        # print(titlesearch)
+        # title_filter = TitleFilter(self.request.GET, queryset=queryset)
+        # queryset = title_filter.qs
+        # if coming from certain address:
+        queryset = Offer.objects.filter(title__icontains=titlesearch)
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        # context['offer_filter'] = OfferFilter(self.request.GET, queryset=self.get_queryset())
+        return context
 
     # def get(self, **kwargs):
 
-class OfferFilterView(ListView):
-    template_name = 'home/offer_filter_view.html'
+# class OfferFilterView(ListView):
+#     template_name = 'home/offer_filter_view.html'
 
 class OfferUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     fields = ['title', 'description', 'negotiable', 'price']
     model = Offer
     template_name = 'home/offer_update_view.html'
+    response_class = TemplateResponse
 
     def get(self, pk, **kwargs):
         offer = Offer.objects.get(id=pk)
@@ -172,7 +174,7 @@ class OfferUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 class OfferDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Offer
     success_url = '/'
-
+    response_class = TemplateResponse
     template_name = 'home/offer_confirm_delete.html'
 
     def test_func(self):

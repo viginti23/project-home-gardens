@@ -67,7 +67,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'livesync.core.middleware.DjangoLiveSyncMiddleware',
-
+    'home.middleware.DetailSearchFilterMiddleware',
 ]
 
 ROOT_URLCONF = 'HomeGarden.urls'
