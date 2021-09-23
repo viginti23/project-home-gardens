@@ -17,13 +17,15 @@ from django.contrib import admin
 from django.urls import path
 from django.urls.conf import include
 from .views import apiOverview, offer_list, offer_create, offer_detail, offer_delete, offer_update
+from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
+    path('auth/', include('rest_framework.urls')),
+    path('obtain-token/', obtain_auth_token, name='api-obtain-token'),
     path('', apiOverview, name='api-overview'),
-    path('offer-list/', offer_list, name='offer-list'),
-    path('offer-create/', offer_create, name='offer-create'),
-    path('offer/<int:pk>/', offer_detail, name='offer-detail'),
-    path('offer/update/<int:pk>/', offer_update, name='offer-update'),
-    path('offer/del/<int:pk>/', offer_delete, name='offer-delete'),
-
+    path('offer-list/', offer_list, name='api-offer-list'),
+    path('offer-create/', offer_create, name='api-offer-create'),
+    path('offer/<int:pk>/', offer_detail, name='api-offer-detail'),
+    path('offer/update/<int:pk>/', offer_update, name='api-offer-update'),
+    path('offer/del/<int:pk>/', offer_delete, name='api-offer-delete'),
 ]

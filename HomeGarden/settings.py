@@ -54,8 +54,7 @@ INSTALLED_APPS = [
     'phonenumber_field',
 
     'rest_framework',
-
-
+    'rest_framework.authtoken',
 ]
 DJANGO_LIVESYNC = {
     'PORT': 8000  # this is optional and is default set to 9001.
@@ -99,8 +98,12 @@ WSGI_APPLICATION = 'HomeGarden.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'DEMO_TEST',
+        'USER': 'postgres',
+        'PASSWORD': '30071992ja',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -166,3 +169,9 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.getenv('ZARODM_EMAIL')
 EMAIL_HOST_PASSWORD = os.getenv('ZARODM_PASSWORD')
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication'
+    ]
+}

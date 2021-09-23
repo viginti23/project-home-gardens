@@ -12,6 +12,8 @@ django-phonenumber-field = {extras = ["phonenumbers"], version = "*"}
 django-cleanup = "*"
 django-livesync = "*"
 djangorestframework = "*"
+httpie = "*"
+psycopg2 = "*"
 
 [dev-packages]
 
